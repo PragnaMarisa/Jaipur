@@ -345,7 +345,6 @@ class Game {
       console.log("winner is player 2");
     }
   }
-  xx;
   start() {
     console.log(
       `-------------------------ROUND ${this.roundNo}-------------------`
