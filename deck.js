@@ -46,6 +46,7 @@ const allCards = [
 
 class Deck {
   cards = [];
+
   constructor(cards) {
     this.cards = cards;
   }
