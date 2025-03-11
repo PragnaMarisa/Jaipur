@@ -51,25 +51,8 @@ const cards = {
   ],
 };
 
-const camelToken = 5;
-
-const coinsOfExcellence = [1, 1, 1];
-
 class Game {
-  tokens = {
-    diamond: [7, 7, 5, 5, 5],
-    gold: [6, 6, 5, 5, 5],
-    silver: [5, 5, 5, 5, 5],
-    clothes: [5, 3, 3, 2, 2, 1, 1],
-    spices: [5, 3, 3, 2, 2, 1, 1],
-    leather: [4, 3, 2, 1, 1, 1, 1, 1, 1],
-  };
-
-  bonusTokens = {
-    3: [1, 1, 2, 3, 3, 2, 2],
-    4: [5, 6, 6, 4, 5, 4],
-    5: [8, 10, 8, 10, 9],
-  };
+  camelToken = 5;
 
   goods = {
     1: "diamond",
@@ -81,7 +64,7 @@ class Game {
   };
 
   prompts = {
-    trade: ["sell or take cards? \n 1.take cards\n 2.sell cards.\n"],
+    tradeChoice: ["sell or take cards? \n 1.take cards\n 2.sell cards.\n"],
     sell: [
       "1.Diamond\n2.Gold\n3.Silver\n4.Clothes\n5.Spices\n6.Leather",
       "Enter no of goods you want to sell\n",
@@ -102,11 +85,10 @@ class Game {
     {
       name: "Player 1",
       hand: [],
-      camels: [],
       tokens: [],
       excellence: 0,
     },
-    { name: "Player 2", hand: [], camels: [], tokens: [], excellence: 0 },
+    { name: "Player 2", hand: [], tokens: [], excellence: 0 },
   ];
 
   constructor(cards) {
@@ -149,19 +131,7 @@ class Game {
     });
   }
 
-  reset() {
-    const excellenceCounts = this.players.map((player) => player.excellence);
-
-    this.gameSetup();
-
-    this.players.forEach((player, index) => {
-      player.excellence = excellenceCounts[index];
-    });
-  }
-
-  addExcellenceToken(player) {
-    player.excellence += 1;
-  }
+  addExcellenceToken = (player) => (player.excellence += 1);
 
   displayScore([player, score], position) {
     console.log(position);
@@ -169,9 +139,7 @@ class Game {
     console.log("Score: ", score);
   }
 
-  calculateTotal(score) {
-    return score.reduce((sum, ele) => sum + ele, 0);
-  }
+  calculateTotal = (score) => score.reduce((sum, ele) => sum + ele, 0);
 
   announceScore([score1, player1], [score2, player2]) {
     if (score1 > score2) {
@@ -196,9 +164,9 @@ class Game {
     ).length;
 
     if (P1Camels > P2Camels) {
-      this.players[0].tokens.push(camelToken);
+      this.players[0].tokens.push(this.camelToken);
     } else if (P2Camels > P1Camels) {
-      this.players[1].tokens.push(camelToken);
+      this.players[1].tokens.push(this.camelToken);
     }
   }
 
@@ -217,18 +185,15 @@ class Game {
     console.log("Player name: ", this.fetchPlayerData("name"));
     console.log("Score: ", this.calculateTotal(this.fetchPlayerData("tokens")));
     console.log("Market: ", this.market);
-    console.log("cards in your hand: ", this.players[this.currentNo].hand);
+    console.log("cards in your hand: ", this.fetchPlayerData("hand"));
     console.log(this.deck.length, "deck");
     console.log(this.tokens);
   }
 
   endGame() {
+    // change 1 to 3
     const areAny3Deprecated =
-      Object.values(this.tokens).filter((arr) => {
-        console.log(arr, arr.length);
-
-        return arr.length === 0;
-      }).length >= 1;
+      Object.values(this.tokens).filter((arr) => arr.length === 0).length >= 1;
 
     return areAny3Deprecated || this.deck.length === 0;
   }
@@ -263,6 +228,8 @@ class Game {
         this.market[indexM],
       ];
     }
+
+    // if they both arrays are not of same length then ask again.
   }
 
   takeSeveralGoods() {
@@ -304,18 +271,16 @@ class Game {
     return typeOfGood;
   };
 
-  getNoOfGoodsSold = (typeOfGood) => {
-    const count = parseInt(prompt(this.prompts.sell[1]));
-    this.fetchPlayerData("tokens").push(
-      ...this.tokens[typeOfGood].slice(0, count)
-    );
-    return count;
-  };
+  getNoOfGoodsSold = () => parseInt(prompt(this.prompts.sell[1]));
 
   sellCards = () => {
     const typeOfGood = this.getTypeOfGood();
 
-    const count = this.getNoOfGoodsSold(typeOfGood);
+    const count = this.getNoOfGoodsSold();
+
+    this.fetchPlayerData("tokens").push(
+      ...this.tokens[typeOfGood].slice(0, count)
+    );
 
     this.tokens[typeOfGood] = this.tokens[typeOfGood].toSpliced(0, count);
     this.removeCards(this.fetchPlayerData("hand"), count, typeOfGood);
@@ -325,7 +290,7 @@ class Game {
   };
 
   tradeChoice = () => {
-    const choice = parseInt(prompt(this.prompts.trade[0]));
+    const choice = parseInt(prompt(this.prompts.tradeChoice[0]));
     return choice == 1 ? this.takeCards() : this.sellCards();
   };
 
@@ -346,9 +311,7 @@ class Game {
     }
   }
   start() {
-    console.log(
-      `-------------------------ROUND ${this.roundNo}-------------------`
-    );
+    console.log(`---------ROUND ${this.roundNo}----------`);
     this.gameSetup();
     this.initializeCardsForPlayers();
     while (!this.endGame()) {
@@ -360,8 +323,8 @@ class Game {
     this.calculateScores();
 
     this.roundNo += 1;
-    if (this.roundNo <= 3) this.start();
-    this.annouceGameWinner();
+    if (this.roundNo > 3) this.annouceGameWinner();
+    this.start();
   }
 }
 
