@@ -42,7 +42,7 @@ const allCards = [
   ...spices,
   ...leathers,
   ...camels,
-];
+].map((ele) => ele.toString());
 
 class Deck {
   cards = [];
@@ -68,4 +68,6 @@ class Deck {
   };
 }
 
-export { Deck };
+const deck = new Deck(allCards);
+
+export { deck };
