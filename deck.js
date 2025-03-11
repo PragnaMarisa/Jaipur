@@ -53,9 +53,9 @@ class Deck {
 
   getRandom = (min, max) => Math.floor(Math.random() * (max - min + 1) + min);
 
-  shuffle = (array) => {
-    const shuffledArray = [...array];
-    const length = array.length;
+  shuffle = () => {
+    const shuffledArray = [...this.cards];
+    const length = shuffledArray.length;
     for (let index = length - 1; index > 0; index--) {
       const randomIndex = this.getRandom(0, index);
       const temp = shuffledArray[index];
@@ -66,6 +66,17 @@ class Deck {
 
     return shuffledArray;
   };
+
+  getCards(count) {
+    const cards = [];
+
+    while (count > 0) {
+      cards.push(this.cards.shift());
+      count--;
+    }
+
+    return cards;
+  }
 }
 
 const deck = new Deck(allCards);

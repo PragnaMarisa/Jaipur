@@ -1,3 +1,19 @@
 import { deck } from "./deck.js";
 
-console.log(deck);
+class Game {
+  deck = [];
+  market = [];
+
+  setUpGame() {
+    this.deck = deck.shuffle();
+    this.market = deck.getCards(5);
+    console.log(deck.cards.length);
+  }
+
+  startGame() {
+    this.setUpGame();
+  }
+}
+
+const game = new Game();
+game.startGame();
