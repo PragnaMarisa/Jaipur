@@ -1,12 +1,17 @@
 class Hand {
-  constructor(hand) {
-    this.hand = hand;
+  constructor(cards) {
+    this.cards = cards;
   }
 }
 
 class Camel {
-  constructor(camels) {
-    this.camels = camels;
+  constructor(cards) {
+    this.cards = cards;
+  }
+}
+class Token {
+  constructor(tokens) {
+    this.tokens = tokens;
   }
 }
 
@@ -30,6 +35,20 @@ class Player {
     const { hand, camels } = this.categorizeCards(array);
     this.hand = new Hand(hand);
     this.camel = new Camel(camels);
+    this.token = new Token([]);
+  }
+
+  hands() {
+    return this.hand.cards;
+  }
+  camels() {
+    return this.camel.cards;
+  }
+
+  calculateTotal = (score) => score.reduce((sum, ele) => sum + ele, 0);
+
+  score() {
+    return this.calculateTotal(this.token.tokens);
   }
 }
 
