@@ -6,15 +6,19 @@ class Market {
 
   refillMarket(deck) {
     while (this.marketCards.length < 5) {
-      this.marketCards.push(deck.shift());
+      this.marketCards.push(deck.getCards(1));
     }
   }
 
   removeCards(count, typeOfGood) {
     for (let i = 0; i < count; i++) {
       const index = this.marketCards.indexOf(typeOfGood);
-      array.splice(index, 1);
+      this.marketCards.splice(index, 1);
     }
+  }
+
+  filterCamels() {
+    return [...this.marketCards].filter((ele) => ele === "camel");
   }
 }
 

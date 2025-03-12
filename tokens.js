@@ -45,6 +45,16 @@ class TokenCollection {
 
   are3TokensDeprecated = () =>
     Object.values(this.tokens).filter((arr) => arr.length === 0).length >= 1;
+
+  // tokensOf(key) {
+  //   return this.tokens[key];
+  // }
+
+  calculateCoinsEarned(typeOfGood, count) {
+    const earnedCoins = this.tokens[typeOfGood].slice(0, count);
+    this.tokens[typeOfGood] = this.tokens[typeOfGood].toSpliced(0, count);
+    return earnedCoins;
+  }
 }
 
 class Bonus3Coins {

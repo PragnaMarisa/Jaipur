@@ -37,7 +37,6 @@ class Player {
     this.camel = new Camel(camels);
     this.token = new Token([]);
   }
-
   hands() {
     return this.hand.cards;
   }
@@ -49,6 +48,14 @@ class Player {
 
   score() {
     return this.calculateTotal(this.token.tokens);
+  }
+
+  addTokens(tokens) {
+    this.token.tokens.push(...tokens);
+  }
+
+  addGoods(good) {
+    this.hand.cards.push(...good);
   }
 }
 
