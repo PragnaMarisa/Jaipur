@@ -1,19 +1,27 @@
 import { Deck, allCards } from "./deck.js";
 import { allTokens, allBonusTokens } from "./tokens.js";
 import { Market } from "./market.js";
+import { Player } from "./player.js";
+import { shuffle } from "./lib.js";
 
 class Game {
   deck = [];
   market = [];
-  players = [
-    { name: "Player 1", hand: [], camels: [], tokens: [], excellence: 0 },
-    { name: "Player 2", hand: [], camels: [], tokens: [], excellence: 0 },
-  ];
+  tokens = [];
+  bonusTokens = [];
+
+  initialisePlayerCards() {}
 
   setUpGame() {
     this.deck = new Deck(allCards);
-    this.deckCards = this.deck.cards;
-    this.market = this.deck.getCards(5);
+    this.deckCards = this.deck.shuffle();
+    this.market = new Market(this.deck.getCards(5));
+    this.initialisePlayerCards();
+  }
+
+  enrollPlayers() {
+    console.log("players enrolled");
+    this.players = [new Player("player1"), new Player("player2")];
   }
 
   startGame() {
@@ -22,4 +30,5 @@ class Game {
 }
 
 const game = new Game();
+game.enrollPlayers();
 game.startGame();

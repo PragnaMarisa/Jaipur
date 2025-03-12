@@ -14,11 +14,11 @@ class ClothCard {
   toString = () => "cloth";
 }
 
-class leatherCard {
+class LeatherCard {
   toString = () => "leather";
 }
 
-class spiceCard {
+class SpiceCard {
   toString = () => "spice";
 }
 
@@ -30,8 +30,8 @@ const diamonds = Array.from({ length: 6 }, () => new DiamondCard());
 const silvers = Array.from({ length: 6 }, () => new SilverCard());
 const golds = Array.from({ length: 6 }, () => new GoldCard());
 const clothes = Array.from({ length: 8 }, () => new ClothCard());
-const spices = Array.from({ length: 8 }, () => new spiceCard());
-const leathers = Array.from({ length: 10 }, () => new leatherCard());
+const spices = Array.from({ length: 8 }, () => new SpiceCard());
+const leathers = Array.from({ length: 10 }, () => new LeatherCard());
 const camels = Array.from({ length: 11 }, () => new CamelCard());
 
 const allCards = [
@@ -51,19 +51,19 @@ class Deck {
     this.cards = cards;
   }
 
-  getRandom = (min, max) => Math.floor(Math.random() * (max - min + 1) + min);
+  #getRandom = (min, max) => Math.floor(Math.random() * (max - min + 1) + min);
 
   shuffle = () => {
     const shuffledArray = [...this.cards];
     const length = shuffledArray.length;
     for (let index = length - 1; index > 0; index--) {
-      const randomIndex = this.getRandom(0, index);
+      const randomIndex = this.#getRandom(0, index);
       const temp = shuffledArray[index];
 
       shuffledArray[index] = shuffledArray[randomIndex];
       shuffledArray[randomIndex] = temp;
     }
-
+    this.cards = shuffledArray;
     return shuffledArray;
   };
 
