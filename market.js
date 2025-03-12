@@ -17,3 +17,5 @@ class Market {
     }
   }
 }
+
+export { Market };

@@ -1,5 +1,6 @@
 import { Deck, allCards } from "./deck.js";
-// market can be an class
+import { allTokens, allBonusTokens } from "./tokens.js";
+import { Market } from "./market.js";
 
 class Game {
   deck = [];
