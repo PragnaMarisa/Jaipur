@@ -1,13 +1,18 @@
-import { deck } from "./deck.js";
+import { Deck, allCards } from "./deck.js";
+// market can be an class
 
 class Game {
   deck = [];
   market = [];
+  players = [
+    { name: "Player 1", hand: [], camels: [], tokens: [], excellence: 0 },
+    { name: "Player 2", hand: [], camels: [], tokens: [], excellence: 0 },
+  ];
 
   setUpGame() {
-    this.deck = deck.shuffle();
-    this.market = deck.getCards(5);
-    console.log(deck.cards.length);
+    this.deck = new Deck(allCards);
+    this.deckCards = this.deck.cards;
+    this.market = this.deck.getCards(5);
   }
 
   startGame() {

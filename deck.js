@@ -79,6 +79,4 @@ class Deck {
   }
 }
 
-const deck = new Deck(allCards);
-
-export { deck };
+export { Deck, allCards };
