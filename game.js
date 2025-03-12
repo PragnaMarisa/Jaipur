@@ -21,12 +21,18 @@ class Game {
     this.initialisePlayerCards();
   }
 
+  displayGame() {
+    console.log(`MARKET : ${this.market.market}`);
+    // console.log(`HAND : ${this.curren}`);
+  }
+
   enrollPlayers() {
     this.players = [new Player("player1"), new Player("player2")];
   }
 
   startGame() {
     this.setUpGame();
+    this.displayGame();
   }
 }
 
