@@ -77,6 +77,10 @@ class Deck {
 
     return cards;
   }
+
+  isEmpty() {
+    return this.cards.length === 0;
+  }
 }
 
 export { Deck, allCards };

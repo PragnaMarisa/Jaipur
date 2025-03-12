@@ -38,6 +38,15 @@ const allTokens = {
   leather: new LeatherTokens().retrieveTokens(),
 };
 
+class TokenCollection {
+  constructor(tokens) {
+    this.tokens = tokens;
+  }
+
+  are3TokensDeprecated = () =>
+    Object.values(this.tokens).filter((arr) => arr.length === 0).length >= 1;
+}
+
 class Bonus3Coins {
   retrieveCoins() {
     return [1, 1, 2, 3, 3, 2, 2];
@@ -60,4 +69,4 @@ const allBonusTokens = {
   5: new Bonus5Coins().retrieveCoins(),
 };
 
-export { allTokens, allBonusTokens };
+export { allTokens, allBonusTokens, TokenCollection };
