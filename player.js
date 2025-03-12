@@ -20,17 +20,16 @@ class Player {
     this.name = name;
   }
 
-  separateHands(array) {
+  categorizeCards(array) {
     const hand = [...array].filter((ele) => ele !== "camel");
     const camels = [...array].filter((ele) => ele === "camel");
     return { hand, camels };
   }
 
   initializeHand(array) {
-    const { hand, camels } = this.separateHands(array);
+    const { hand, camels } = this.categorizeCards(array);
     this.hand = new Hand(hand);
     this.camel = new Camel(camels);
-    console.log(this.hand, this.camel);
   }
 }
 

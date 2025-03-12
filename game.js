@@ -10,7 +10,9 @@ class Game {
   tokens = [];
   bonusTokens = [];
 
-  initialisePlayerCards() {}
+  initialisePlayerCards() {
+    this.players.map((player) => player.initializeHand(this.deck.getCards(5)));
+  }
 
   setUpGame() {
     this.deck = new Deck(allCards);
@@ -20,7 +22,6 @@ class Game {
   }
 
   enrollPlayers() {
-    console.log("players enrolled");
     this.players = [new Player("player1"), new Player("player2")];
   }
 
