@@ -6,7 +6,7 @@ class Market {
 
   refillMarket(deck) {
     while (this.marketCards.length < 5) {
-      this.marketCards.push(deck.getCards(1));
+      this.marketCards.push(...deck.getCards(1));
     }
   }
 
@@ -19,6 +19,21 @@ class Market {
 
   filterCamels() {
     return [...this.marketCards].filter((ele) => ele === "camel");
+  }
+
+  filterGoods() {
+    return [...this.marketCards].filter((ele) => ele !== "camel");
+  }
+
+  isPresent(good) {
+    const market = new Set(this.marketCards);
+    console.log("amrket", market, good, market.has(good));
+
+    return market.has(good);
+  }
+
+  addCards(goods) {
+    this.marketCards.push(...goods);
   }
 }
 

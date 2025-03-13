@@ -26,18 +26,16 @@ class View {
 
   displayGame(tokens, marketCards, score, hands, camels) {
     console.log(`TOKENS : `, tokens);
-    console.log(`MARKET : ${marketCards}`);
-    console.log(`CURRENT SCORE : ${score}`);
+    console.log(`MARKET : `, marketCards);
+    console.log(`CURRENT SCORE : `, score);
 
-    console.log(`HAND : ${hands}`);
-    console.log(`CAMELS : ${camels}`);
+    console.log(`HAND : `, hands);
+    console.log(`CAMELS : `, camels);
   }
 
-  getTypeOfGood = (goods) => {
+  getTypeOfGood = () => {
     const codeOfGood = parseInt(prompt(this.prompts.sell[0]));
-    const typeOfGood = goods[codeOfGood];
-    if (!typeOfGood) this.sellGoods();
-    return typeOfGood;
+    return codeOfGood;
   };
 
   getNoOfGoodsSold = () => parseInt(prompt(this.prompts.sell[1]));
@@ -51,13 +49,20 @@ class View {
 
   takeGoods() {
     const choice = parseInt(prompt(this.prompts.takeCards[0]));
-    if (!(choice > 0 && choice < 4)) this.takeGoods();
     return choice;
   }
 
   takeSingleGood() {
     const good = prompt(this.prompts.singleGood[0]);
     return good;
+  }
+
+  takeSeveralGoods() {
+    let goodsToBeTaken = prompt(this.prompts.severalGoods[0]);
+    goodsToBeTaken = goodsToBeTaken.split(" ");
+    let goodsToBeGiven = prompt(this.prompts.severalGoods[1]);
+    goodsToBeGiven = goodsToBeGiven.split(" ");
+    return [goodsToBeGiven, goodsToBeTaken];
   }
 
   exchangeGoods(goodsToBeGiven, goodsToBeTaken) {
@@ -71,21 +76,6 @@ class View {
     }
 
     // if they both arrays are not of same length then ask again.
-  }
-
-  takeSeveralGoods() {
-    let goodsToBeTaken = prompt(this.prompts.severalGoods[0]);
-    goodsToBeTaken = goodsToBeTaken.split(" ");
-    let goodsToBeGiven = prompt(this.prompts.severalGoods[1]);
-    goodsToBeGiven = goodsToBeGiven.split(" ");
-    this.exchangeGoods(goodsToBeGiven, goodsToBeTaken);
-  }
-
-  takeAllCamels() {
-    const camels = [...this.market].filter((ele) => ele === "camels");
-    this.removeCards(this.market, camels.length, "camels");
-    this.fetchPlayerData("hand").push(...camels);
-    this.refillMarket();
   }
 }
 

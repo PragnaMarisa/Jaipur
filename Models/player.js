@@ -54,8 +54,23 @@ class Player {
     this.token.tokens.push(...tokens);
   }
 
-  addGoods(good) {
-    this.hand.cards.push(...good);
+  addCards(goods) {
+    const { hand, camels } = this.categorizeCards(goods);
+
+    this.hand.cards.push(...hand);
+    this.camel.cards.push(...camels);
+  }
+
+  isPresent(good) {
+    const hand = new Set(this.hand.cards);
+    return hand.has(good);
+  }
+
+  removeCards(count, good) {
+    for (let i = 0; i < count; i++) {
+      const index = this.hand.cards.indexOf(good);
+      this.hand.cards.splice(index, 1);
+    }
   }
 }
 
