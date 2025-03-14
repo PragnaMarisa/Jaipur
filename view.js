@@ -24,11 +24,11 @@ class View {
     return choice;
   }
 
-  displayGame(tokens, marketCards, score, hands, camels) {
+  displayGame(tokens, marketCards, name, score, hands, camels) {
     console.log(`TOKENS : `, tokens);
     console.log(`MARKET : `, marketCards);
+    console.log(`PLAYER NAME : `, name);
     console.log(`CURRENT SCORE : `, score);
-
     console.log(`HAND : `, hands);
     console.log(`CAMELS : `, camels);
   }

@@ -42,15 +42,20 @@ class Game {
   areGoodsPresentInMarket(goods) {
     return goods.every((good) => this.market.isPresent(good));
   }
-  areGoodsPresentInHand(goods) {
+  areGoodsPresentInPlayer(goods) {
     return goods.every((good) => this.currentPlayer.isPresent(good));
+  }
+
+  updatePlayersScore() {
+    const scores = this.players.map((player) => player.score());
+    console.log(scores);
   }
 
   isAValidExchange(goodsToBeGiven, goodsToBeTaken) {
     return (
       this.areValidGoods(goodsToBeTaken) &&
       this.areGoodsPresentInMarket(goodsToBeTaken) &&
-      this.areGoodsPresentInHand(goodsToBeGiven) &&
+      this.areGoodsPresentInPlayer(goodsToBeGiven) &&
       goodsToBeGiven.length === goodsToBeTaken.length
     );
   }
@@ -76,6 +81,7 @@ class Game {
     return [
       this.tokens,
       this.marketCards,
+      this.currentPlayer.name,
       this.currentPlayer.score(),
       this.currentPlayer.hands(),
       this.currentPlayer.camels(),
@@ -125,39 +131,4 @@ class Game {
       this.currentPlayer.addTokens([this.bonusTokens[count].shift()]);
   };
 }
-
-// const game = new Game();
-// const view = new View();
-
-// game.enrollPlayers();
-// game.setUpGame();
-// while (!game.isEndOfRound()) {
-//   const displayData = game.displayGame();
-//   view.displayGame(...displayData);
-
-//   const choice = view.tradeChoice();
-
-//   if (choice === 1) {
-//     const choice = view.takeGoods(game.goods);
-//     switch (choice) {
-//       case 1: {
-//         const goodName = view.takeSingleGood();
-//         game.takeSingleGood([goodName]);
-//         break;
-//       }
-//       case 2: {
-//         const data = view.takeSeveralGoods();
-//         game.takeSeveralGoods(...data);
-//         break;
-//       }
-//       case 3: {
-//         game.takeAllCamels();
-//       }
-//     }
-//   } else {
-//     const data = view.sellGoods(game.goods);
-//     game.sellGoods(...data);
-//   }
-// }
-
 export { Game };

@@ -16,12 +16,9 @@ class Token {
 }
 
 class Player {
-  constructor() {
+  constructor(name) {
     this.hand;
     this.camel;
-    this.name;
-  }
-  enroll(name) {
     this.name = name;
   }
 
@@ -62,7 +59,7 @@ class Player {
   }
 
   isPresent(good) {
-    const hand = new Set(this.hand.cards);
+    const hand = new Set([...this.hand.cards, ...this.camel.cards]);
     return hand.has(good);
   }
 

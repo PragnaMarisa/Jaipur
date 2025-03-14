@@ -2,12 +2,20 @@ import { View } from "./view.js";
 import { Game } from "./Models/game.js";
 
 class Controller {
+  constructor() {
+    this.RoundNo = 1;
+  }
   beginGame() {
     this.game = new Game();
     this.view = new View();
     this.game.enrollPlayers();
-    this.game.setUpGame();
-    this.executeRound();
+    while (this.RoundNo <= 3 && !this.game.isAWinner) {
+      this.game.setUpGame();
+      this.executeRound();
+    }
+    // implement these functions in their classes
+    const [winner, runner] = this.game.fetchPlayersSummary();
+    this.view.playerSummary(winner, runner);
   }
 
   processSingleGood() {
@@ -50,11 +58,18 @@ class Controller {
 
   executeRound() {
     while (!this.game.isEndOfRound()) {
+      console.clear();
       const displayData = this.game.displayGame();
       this.view.displayGame(...displayData);
       const choice = this.view.tradeChoice();
       this.processTradeDecision(choice);
+      this.view.displayGame(...displayData);
+      this.game.changePlayer();
     }
+
+    // implement these functions
+    const [winner, runner] = this.updatePlayersScore();
+    this.view.roundSummary(winner, runner);
   }
 }
 

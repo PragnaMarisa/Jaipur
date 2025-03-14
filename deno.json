@@ -1,0 +1,15 @@
+{
+  "lint": {
+    "rules": {
+      "tags": ["recommended"],
+      "include": ["camelcase"]
+    }
+  },
+  "fmt": {
+    "lineWidth": 80,
+    "indentWidth": 2,
+    "useTabs": false,
+    "singleQuote": false,
+    "proseWrap": "preserve"
+  }
+}
