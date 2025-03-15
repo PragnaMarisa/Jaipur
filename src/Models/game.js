@@ -60,7 +60,7 @@ class Game {
   }
 
   isHandInLimit(extra = 0) {
-    return this.currentPlayer.hand.cards.length + extra <= 7;
+    return this.currentPlayer.hand.cards.length + extra < 8;
   }
 
   validateIfPremium(good, count) {
