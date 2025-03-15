@@ -55,6 +55,10 @@ class Game {
     console.log(scores);
   }
 
+  isHandInLimit(extra = 0) {
+    return this.currentPlayer.hand.cards.length + extra <= 7;
+  }
+
   validateIfPremium(good, count) {
     if (["gold", "diamond", "silver"].includes(good)) {
       return count > 1;
@@ -113,6 +117,14 @@ class Game {
     return this.tokenCollection.are3TokensDeprecated() || this.deck.isEmpty();
   }
 
+  validateSingleGood(good) {
+    return (
+      this.isValidGood(good) &&
+      this.isPresentInMarket(good) &&
+      this.isHandInLimit(1)
+    );
+  }
+
   takeSingleGood(good) {
     this.currentPlayer.addCards([...good]);
     this.market.removeCards(1, good);
@@ -136,6 +148,14 @@ class Game {
     this.market.removeCards(camelsInMarket.length, "camels");
     this.currentPlayer.addCards(camelsInMarket);
     this.market.refillMarket(this.deck);
+  }
+
+  validateSellingGoods(good, count) {
+    return (
+      this.currentPlayer.countOf(good) === count &&
+      this.game.isValidGood(good) &&
+      this.game.validateIfPremium(good, count)
+    );
   }
 
   sellGoods = (typeOfGood, count) => {

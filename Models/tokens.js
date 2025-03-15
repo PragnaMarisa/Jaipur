@@ -44,7 +44,7 @@ class TokenCollection {
   }
 
   are3TokensDeprecated = () =>
-    Object.values(this.tokens).filter((arr) => arr.length === 0).length >= 1;
+    Object.values(this.tokens).filter((arr) => arr.length === 0).length >= 2;
 
   calculateCoinsEarned(typeOfGood, count) {
     const earnedCoins = this.tokens[typeOfGood].slice(0, count);

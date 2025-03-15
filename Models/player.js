@@ -71,6 +71,10 @@ class Player {
     return hand.has(good);
   }
 
+  countOf(good) {
+    return [...this.hand.cards].filter((e) => e === good).length;
+  }
+
   removeCards(count, good) {
     for (let i = 0; i < count; i++) {
       if (good === "camel") {

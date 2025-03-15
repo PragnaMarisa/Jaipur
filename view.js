@@ -65,17 +65,9 @@ class View {
     return [goodsToBeGiven, goodsToBeTaken];
   }
 
-  exchangeGoods(goodsToBeGiven, goodsToBeTaken) {
-    for (let i = 0; i < goodsToBeGiven.length; i++) {
-      const indexM = this.market.indexOf(goodsToBeTaken[i]);
-      const indexH = this.fetchPlayerData("hand").indexOf(goodsToBeGiven[i]);
-      [this.market[indexM], this.fetchPlayerData("hand")[indexH]] = [
-        this.fetchPlayerData("hand")[indexH],
-        this.market[indexM],
-      ];
-    }
-
-    // if they both arrays are not of same length then ask again.
+  roundSummary(winner, runner) {
+    console.log("winner", winner.name);
+    console.log("runner", runner.name);
   }
 }
 

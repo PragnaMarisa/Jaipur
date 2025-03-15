@@ -21,10 +21,11 @@ class Controller {
   processSingleGood() {
     const good = this.view.takeSingleGood();
 
-    if (this.game.isValidGood(good) && this.game.isPresentInMarket(good))
+    if (this.game.validateSingleGood(good)) {
       return this.game.takeSingleGood([good]);
+    }
 
-    return this.processSingleGood();
+    return this.processTradeDecision();
   }
 
   processExchangeGoods() {
@@ -33,29 +34,32 @@ class Controller {
     if (this.game.isAValidExchange(goodsToBeGiven, goodsToBeTaken)) {
       return this.game.takeSeveralGoods(goodsToBeGiven, goodsToBeTaken);
     }
-    return this.processExchangeGoods();
+    return this.processTradeDecision();
   }
+
   processGoodsChoice(choice) {
-    if (choice === 1) {
-      return this.processSingleGood();
-    } else if (choice === 2) {
-      return this.processExchangeGoods();
-    } else {
-      this.game.takeAllCamels();
-    }
+    const choices = {
+      1: this.processSingleGood,
+      2: this.processExchangeGoods,
+      3: this.game.takeAllCamels,
+    };
+
+    return choices[choice]();
   }
 
   sellGoods() {
     const [goodNo, count] = this.view.sellGoods();
     const good = this.game.goods[goodNo];
-
-    if (this.game.isValidGood(good) && this.game.validateIfPremium(good, count))
+    if (this.game.validateSellingGoods(good, count)) {
       return this.game.sellGoods(good, count);
+    }
 
-    return this.sellGoods();
+    return this.processTradeDecision();
   }
 
-  processTradeDecision(choice) {
+  processTradeDecision() {
+    const choice = this.view.tradeChoice();
+
     if (choice === 1) {
       const choice = this.view.takeGoods(this.game.goods);
       if (!(choice > 0 && choice < 4)) return this.takeGoods();
@@ -70,14 +74,12 @@ class Controller {
       // console.clear();
       const displayData = this.game.displayGame();
       this.view.displayGame(...displayData);
-      const choice = this.view.tradeChoice();
-      this.processTradeDecision(choice);
+      this.processTradeDecision();
       // this.view.displayGame(...displayData);
       // this.game.changePlayer();
     }
 
-    // implement these functions
-    const [winner, runner] = this.updatePlayersScore();
+    const [winner, runner] = this.game.updatePlayersScore();
     this.view.roundSummary(winner, runner);
   }
 }
