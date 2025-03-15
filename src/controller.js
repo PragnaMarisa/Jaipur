@@ -8,11 +8,14 @@ class Controller {
   beginGame() {
     this.game = new Game();
     this.view = new View();
+
     this.game.enrollPlayers();
-    while (this.RoundNo <= 3 && !this.game.isAWinner) {
-      this.game.setUpGame();
-      this.executeRound();
-    }
+
+    // while (this.RoundNo <= 3 && !this.game.isAWinner()) {
+    this.game.setUpGame();
+    this.executeRound();
+    // }
+
     // implement these functions in their classes
     const [winner, runner] = this.game.fetchPlayersSummary();
     this.view.playerSummary(winner, runner);
@@ -39,9 +42,9 @@ class Controller {
 
   processGoodsChoice(choice) {
     const choices = {
-      1: this.processSingleGood,
-      2: this.processExchangeGoods,
-      3: this.game.takeAllCamels,
+      1: this.processSingleGood.bind(this),
+      2: this.processExchangeGoods.bind(this),
+      3: this.game.takeAllCamels.bind(this.game),
     };
 
     return choices[choice]();

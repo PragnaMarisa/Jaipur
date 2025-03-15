@@ -3,7 +3,6 @@ import { allCards } from "./cards.js";
 import { allGoodsTokens, TokenCollection } from "./tokenCollection.js";
 import { Market } from "./market.js";
 import { Player } from "./player.js";
-import { removeCards } from "../lib.js";
 import { allBonusTokens } from "./bonusTokens.js";
 
 class Game {
@@ -90,6 +89,7 @@ class Game {
       "camel",
       ...this.deck.getCards(2),
     ]);
+
     this.tokenCollection = new TokenCollection({ ...allGoodsTokens });
   }
 
@@ -98,7 +98,7 @@ class Game {
     this.tokens = { ...allGoodsTokens };
     this.marketCards = this.market.marketCards;
     this.tokens = this.tokenCollection.tokens;
-    this.bonusTokens = { ...allBonusTokens };
+    this.bonusTokens = { ...allBonusTokens() };
     this.initialisePlayerCards();
     this.currentPlayer = this.players[this.currentPlayerNo];
   }
@@ -137,8 +137,6 @@ class Game {
   }
 
   takeSeveralGoods(goodsToBeGiven, goodsToBeTaken) {
-    console.log(goodsToBeGiven, goodsToBeTaken);
-
     for (let index = 0; index < goodsToBeGiven.length; index++) {
       this.market.removeCards(1, goodsToBeTaken[index]);
       this.currentPlayer.removeCards(1, goodsToBeGiven[index]);
@@ -158,8 +156,8 @@ class Game {
   validateSellingGoods(good, count) {
     return (
       this.currentPlayer.countOf(good) === count &&
-      this.game.isValidGood(good) &&
-      this.game.validateIfPremium(good, count)
+      this.isValidGood(good) &&
+      this.validateIfPremium(good, count)
     );
   }
 
@@ -171,7 +169,7 @@ class Game {
 
     this.currentPlayer.addTokens(tokensEarned);
 
-    removeCards(this.currentPlayer.hands(), count, typeOfGood);
+    this.currentPlayer.removeCards(count, typeOfGood);
     if (count > 2)
       this.currentPlayer.addTokens([this.bonusTokens[count].shift()]);
   };

@@ -18,6 +18,8 @@ class Market {
   }
 
   filterCamels() {
+    console.log([...this.marketCards].filter((ele) => ele === "camel"));
+
     return [...this.marketCards].filter((ele) => ele === "camel");
   }
 
