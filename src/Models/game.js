@@ -1,8 +1,9 @@
-import { Deck, allCards } from "./deck.js";
+import { Deck } from "./deck.js";
+import { allCards } from "./cards.js";
 import { allTokens, allBonusTokens, TokenCollection } from "./tokens.js";
 import { Market } from "./market.js";
 import { Player } from "./player.js";
-import { shuffle, removeCards } from "../lib.js";
+import { removeCards } from "../lib.js";
 
 class Game {
   goods = {

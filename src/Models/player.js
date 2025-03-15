@@ -1,31 +1,6 @@
-class Hand {
-  constructor(cards) {
-    this.cards = cards;
-  }
-
-  addCards(cards) {
-    this.cards.push(...cards);
-  }
-}
-
-class Camel {
-  constructor(cards) {
-    this.cards = cards;
-  }
-
-  removeCards() {
-    this.cards.pop();
-  }
-
-  addCards(cards) {
-    this.cards.push(...cards);
-  }
-}
-class Token {
-  constructor(tokens) {
-    this.tokens = tokens;
-  }
-}
+import { Hand } from "./hand.js";
+import { Camel } from "./camel.js";
+import { Token } from "./token.js";
 
 class Player {
   constructor(name) {
@@ -55,14 +30,12 @@ class Player {
     return this.camel.cards;
   }
 
-  calculateTotal = (score) => score.reduce((sum, ele) => sum + ele, 0);
-
   score() {
-    return this.calculateTotal(this.token.tokens);
+    return this.token.calculateTotal();
   }
 
   addTokens(tokens) {
-    this.token.tokens.push(...tokens);
+    this.token.addToken(tokens);
   }
 
   addCards(goods) {
