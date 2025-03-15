@@ -60,7 +60,7 @@ class Game {
   }
 
   isAWinner() {
-    return this.players.map((player) => player.excellence);
+    return this.players.map((player) => player.excellence).includes(2);
   }
 
   isHandInLimit(extra = 0) {
@@ -82,7 +82,6 @@ class Game {
 
   validateCountOfGoodsInHands(goodsToBeGiven) {
     const camels = goodsToBeGiven.filter((ele) => ele === "camel");
-
     return this.isHandInLimit(camels.length);
   }
 
@@ -149,8 +148,8 @@ class Game {
   }
 
   takeSingleGood(good) {
-    this.currentPlayer.addCards([...good]);
-    this.market.removeCards(1, good);
+    this.currentPlayer.addCards(...good);
+    this.market.removeCards(1, ...good);
     this.market.refillMarket(this.deck);
   }
 
@@ -184,6 +183,7 @@ class Game {
       typeOfGood,
       count
     );
+    console.log(tokensEarned, "tokens earned");
 
     this.currentPlayer.addTokens(tokensEarned);
     this.currentPlayer.removeCards(count, typeOfGood);
@@ -211,7 +211,10 @@ class Game {
       return [palyer1, player2, "tie"];
     }
 
-    return score1 > score2 ? [palyer1, player2] : [player2, palyer1];
+    const [winner, runner] =
+      score1 > score2 ? [palyer1, player2] : [player2, palyer1];
+    winner.excellence += 1;
+    return [winner, runner];
   }
 
   fetchPlayersSummary() {

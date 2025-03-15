@@ -11,14 +11,14 @@ class Controller {
 
     this.game.enrollPlayers();
 
-    // while (this.RoundNo <= 3 && !this.game.isAWinner()) {
-    this.game.setUpGame();
-    this.executeRound();
-    // }
+    while (this.RoundNo <= 3 && !this.game.isAWinner()) {
+      this.game.setUpGame();
+      this.executeRound();
+    }
 
     // implement these functions in their classes
-    const [winner, runner] = this.game.fetchPlayersSummary();
-    this.view.playerSummary(winner, runner);
+    // const [winner, runner] = this.game.fetchPlayersSummary();
+    // this.view.playerSummary(winner, runner);
   }
 
   processSingleGood() {
@@ -81,11 +81,12 @@ class Controller {
       this.view.displayGame(...displayData);
       this.processTradeDecision();
       // this.view.displayGame(...displayData);
-      // this.game.changePlayer();
+      this.game.changePlayer();
     }
 
     const [winner, runner] = this.game.updatePlayersScore();
     this.view.roundSummary(winner, runner);
+    this.RoundNo += 1;
   }
 }
 
