@@ -8,6 +8,14 @@ class Camel {
   constructor(cards) {
     this.cards = cards;
   }
+
+  removeCards() {
+    this.cards.pop();
+  }
+
+  addCards(cards) {
+    this.cards.push(...cards);
+  }
 }
 class Token {
   constructor(tokens) {
@@ -53,9 +61,9 @@ class Player {
 
   addCards(goods) {
     const { hand, camels } = this.categorizeCards(goods);
-
+    console.log(camels, hand);
     this.hand.cards.push(...hand);
-    this.camel.cards.push(...camels);
+    this.camel.addCards(camels);
   }
 
   isPresent(good) {
@@ -65,6 +73,10 @@ class Player {
 
   removeCards(count, good) {
     for (let i = 0; i < count; i++) {
+      if (good === "camel") {
+        this.camel.removeCards();
+        continue;
+      }
       const index = this.hand.cards.indexOf(good);
       this.hand.cards.splice(index, 1);
     }

@@ -27,8 +27,6 @@ class Market {
 
   isPresent(good) {
     const market = new Set(this.marketCards);
-    console.log("amrket", market, good, market.has(good));
-
     return market.has(good);
   }
 

@@ -32,7 +32,7 @@ const golds = Array.from({ length: 6 }, () => new GoldCard());
 const clothes = Array.from({ length: 8 }, () => new ClothCard());
 const spices = Array.from({ length: 8 }, () => new SpiceCard());
 const leathers = Array.from({ length: 10 }, () => new LeatherCard());
-const camels = Array.from({ length: 11 }, () => new CamelCard());
+const camels = Array.from({ length: 8 }, () => new CamelCard());
 
 const allCards = [
   ...diamonds,

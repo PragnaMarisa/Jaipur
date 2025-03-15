@@ -1,4 +1,4 @@
-import { shuffle } from "./lib.js";
+import { shuffle } from "../lib.js";
 
 const cards = {
   diamond: ["diamond", "diamond", "diamond", "diamond", "diamond", "diamond"],

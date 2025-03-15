@@ -18,7 +18,7 @@ class View {
     const choice = parseInt(prompt(this.prompts.tradeChoice[0]));
 
     if (!(choice === 1 || choice === 2)) {
-      this.tradeChoice();
+      return this.tradeChoice();
     }
 
     return choice;

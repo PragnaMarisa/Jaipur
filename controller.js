@@ -21,7 +21,9 @@ class Controller {
   processSingleGood() {
     const good = this.view.takeSingleGood();
 
-    if (this.game.isValidGood(good)) return this.game.takeSingleGood([good]);
+    if (this.game.isValidGood(good) && this.game.isPresentInMarket(good))
+      return this.game.takeSingleGood([good]);
+
     return this.processSingleGood();
   }
 
@@ -43,28 +45,35 @@ class Controller {
     }
   }
 
+  sellGoods() {
+    const [goodNo, count] = this.view.sellGoods();
+    const good = this.game.goods[goodNo];
+
+    if (this.game.isValidGood(good) && this.game.validateIfPremium(good, count))
+      return this.game.sellGoods(good, count);
+
+    return this.sellGoods();
+  }
+
   processTradeDecision(choice) {
     if (choice === 1) {
       const choice = this.view.takeGoods(this.game.goods);
       if (!(choice > 0 && choice < 4)) return this.takeGoods();
       return this.processGoodsChoice(choice);
     } else {
-      const [goodNo, count] = this.view.sellGoods();
-      const good = this.game.goods[goodNo];
-      if (this.game.isValidGood(good)) return this.game.sellGoods(good, count);
-      return this.view.takeGoods();
+      return this.sellGoods();
     }
   }
 
   executeRound() {
     while (!this.game.isEndOfRound()) {
-      console.clear();
+      // console.clear();
       const displayData = this.game.displayGame();
       this.view.displayGame(...displayData);
       const choice = this.view.tradeChoice();
       this.processTradeDecision(choice);
-      this.view.displayGame(...displayData);
-      this.game.changePlayer();
+      // this.view.displayGame(...displayData);
+      // this.game.changePlayer();
     }
 
     // implement these functions

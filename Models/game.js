@@ -30,6 +30,10 @@ class Game {
     this.players.map((player) => player.initializeHand(this.deck.getCards(5)));
   }
 
+  isPresentInMarket(good) {
+    return this.market.isPresent(good);
+  }
+
   isValidGood(good) {
     const goods = new Set(Object.values(this.goods));
     return goods.has(good);
@@ -51,19 +55,32 @@ class Game {
     console.log(scores);
   }
 
+  validateIfPremium(good, count) {
+    if (["gold", "diamond", "silver"].includes(good)) {
+      return count > 1;
+    }
+    return true;
+  }
+
   isAValidExchange(goodsToBeGiven, goodsToBeTaken) {
     return (
       this.areValidGoods(goodsToBeTaken) &&
       this.areGoodsPresentInMarket(goodsToBeTaken) &&
       this.areGoodsPresentInPlayer(goodsToBeGiven) &&
-      goodsToBeGiven.length === goodsToBeTaken.length
+      goodsToBeGiven.length === goodsToBeTaken.length &&
+      goodsToBeGiven.length > 1
     );
   }
 
   createInstances() {
     this.deck = new Deck(allCards);
     this.deckCards = this.deck.shuffle();
-    this.market = new Market(this.deck.getCards(5));
+    this.market = new Market([
+      "camel",
+      "camel",
+      "camel",
+      ...this.deck.getCards(2),
+    ]);
     this.tokenCollection = new TokenCollection({ ...allTokens });
   }
 
@@ -103,6 +120,8 @@ class Game {
   }
 
   takeSeveralGoods(goodsToBeGiven, goodsToBeTaken) {
+    console.log(goodsToBeGiven, goodsToBeTaken);
+
     for (let index = 0; index < goodsToBeGiven.length; index++) {
       this.market.removeCards(1, goodsToBeTaken[index]);
       this.currentPlayer.removeCards(1, goodsToBeGiven[index]);
