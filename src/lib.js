@@ -14,10 +14,5 @@ const shuffle = (array) => {
 
   return shuffledArray;
 };
-function removeCards(array, count, typeOfGood) {
-  for (let i = 0; i < count; i++) {
-    const index = array.indexOf(typeOfGood);
-    array.splice(index, 1);
-  }
-}
-export { removeCards, shuffle };
+
+export { shuffle };

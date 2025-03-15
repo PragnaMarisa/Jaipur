@@ -9,8 +9,11 @@ class TokenCollection {
     Object.values(this.tokens).filter((arr) => arr.length === 0).length >= 2;
 
   calculateCoinsEarned(typeOfGood, count) {
-    const earnedCoins = this.tokens[typeOfGood].slice(0, count);
-    this.tokens[typeOfGood] = this.tokens[typeOfGood].toSpliced(0, count);
+    const tokens = this.tokens[typeOfGood];
+    if (!tokens) return [];
+    count = count > tokens.length ? tokens.length : count;
+    const earnedCoins = tokens.slice(0, count);
+    this.tokens[typeOfGood] = tokens.toSpliced(0, count);
     return earnedCoins;
   }
 }

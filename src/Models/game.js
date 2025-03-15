@@ -1,9 +1,10 @@
 import { Deck } from "./deck.js";
 import { allCards } from "./cards.js";
-import { allTokens, allBonusTokens, TokenCollection } from "./tokens.js";
+import { allGoodsTokens, TokenCollection } from "./tokenCollection.js";
 import { Market } from "./market.js";
 import { Player } from "./player.js";
 import { removeCards } from "../lib.js";
+import { allBonusTokens } from "./bonusTokens.js";
 
 class Game {
   goods = {
@@ -89,12 +90,12 @@ class Game {
       "camel",
       ...this.deck.getCards(2),
     ]);
-    this.tokenCollection = new TokenCollection({ ...allTokens });
+    this.tokenCollection = new TokenCollection({ ...allGoodsTokens });
   }
 
   setUpGame() {
     this.createInstances();
-    this.tokens = { ...allTokens };
+    this.tokens = { ...allGoodsTokens };
     this.marketCards = this.market.marketCards;
     this.tokens = this.tokenCollection.tokens;
     this.bonusTokens = { ...allBonusTokens };

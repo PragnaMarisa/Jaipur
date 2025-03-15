@@ -22,6 +22,7 @@ class Deck {
   };
 
   getCards(count) {
+    if (count > this.cards.length) count = this.cards.length;
     const cards = [];
 
     while (count > 0) {

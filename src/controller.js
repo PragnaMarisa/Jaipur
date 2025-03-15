@@ -1,5 +1,5 @@
 import { View } from "./view.js";
-import { Game } from "./src/Models/game.js";
+import { Game } from "./Models/game.js";
 
 class Controller {
   constructor() {
