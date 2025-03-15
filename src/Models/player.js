@@ -50,7 +50,8 @@ class Player {
   }
 
   countOf(good) {
-    return [...this.hand.cards].filter((e) => e === good).length;
+    return [...this.hand.cards, ...this.camel.cards].filter((e) => e === good)
+      .length;
   }
 
   removeCards(count, good) {

@@ -34,6 +34,10 @@ class Market {
   addCards(goods) {
     this.marketCards.push(...goods);
   }
+
+  countOf(good) {
+    return [...this.marketCards].filter((e) => e === good).length;
+  }
 }
 
 export { Market };

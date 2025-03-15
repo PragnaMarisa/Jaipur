@@ -85,7 +85,36 @@ class Game {
     return this.isHandInLimit(camels.length);
   }
 
-  validateCountOfGoodsInExchange(goodsToBeGiven, goodsToBeTaken) {}
+  countOccurrences(arr) {
+    return arr.reduce((acc, curr) => {
+      acc[curr] = (acc[curr] || 0) + 1;
+      return acc;
+    }, {});
+  }
+
+  validateCountOfGoodsInExchange(goodsToBeGiven, goodsToBeTaken) {
+    const occurencesOfGiven = this.countOccurrences(goodsToBeGiven);
+    const occurencesOfTaken = this.countOccurrences(goodsToBeTaken);
+    console.log(
+      Object.keys(occurencesOfGiven).every(
+        (good) => this.currentPlayer.countOf(good) >= occurencesOfGiven[good]
+      ),
+      Object.keys(occurencesOfTaken).every((good) => {
+        console.log(this.market.countOf(good), occurencesOfTaken[good], good);
+
+        return this.market.countOf(good) >= occurencesOfTaken[good];
+      })
+    );
+
+    return (
+      Object.keys(occurencesOfGiven).every(
+        (good) => this.currentPlayer.countOf(good) >= occurencesOfGiven[good]
+      ) &&
+      Object.keys(occurencesOfTaken).every(
+        (good) => this.market.countOf(good) >= occurencesOfTaken[good]
+      )
+    );
+  }
 
   isAValidExchange(goodsToBeGiven, goodsToBeTaken) {
     return (
