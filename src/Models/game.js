@@ -50,6 +50,9 @@ class Game {
   areGoodsPresentInPlayer(goods) {
     return goods.every((good) => this.currentPlayer.isPresent(good));
   }
+  deckLength() {
+    return this.deck.cards.length;
+  }
 
   updatePlayersScore() {
     const scores = this.players.map((player) => player.score());
@@ -148,7 +151,7 @@ class Game {
 
   takeAllCamels() {
     const camelsInMarket = this.market.filterCamels();
-    this.market.removeCards(camelsInMarket.length, "camels");
+    this.market.removeCards(camelsInMarket.length, "camel");
     this.currentPlayer.addCards(camelsInMarket);
     this.market.refillMarket(this.deck);
   }

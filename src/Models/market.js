@@ -13,13 +13,12 @@ class Market {
   removeCards(count, typeOfGood) {
     for (let i = 0; i < count; i++) {
       const index = this.marketCards.indexOf(typeOfGood);
+
       this.marketCards.splice(index, 1);
     }
   }
 
   filterCamels() {
-    console.log([...this.marketCards].filter((ele) => ele === "camel"));
-
     return [...this.marketCards].filter((ele) => ele === "camel");
   }
 
