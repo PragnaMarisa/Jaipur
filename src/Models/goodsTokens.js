@@ -10,7 +10,8 @@ class SilverTokens {
 }
 class GoldTokens {
   retrieveTokens() {
-    return [6, 6, 5, 5, 5];
+    return [6, 6];
+    // return [6, 6, 5, 5, 5];
   }
 }
 class ClothTokens {

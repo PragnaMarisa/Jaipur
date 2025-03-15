@@ -50,9 +50,6 @@ class Game {
   areGoodsPresentInPlayer(goods) {
     return goods.every((good) => this.currentPlayer.isPresent(good));
   }
-  deckLength() {
-    return this.deck.cards.length;
-  }
 
   updatePlayersScore() {
     const scores = this.players.map((player) => player.score());
@@ -73,13 +70,26 @@ class Game {
     return true;
   }
 
+  areExchangingSameGoods(goodsToBeGiven, goodsToBeTaken) {
+    const set1 = new Set(goodsToBeGiven);
+    const set2 = new Set(goodsToBeTaken);
+    return set1.intersection(set2).size === 0;
+  }
+
+  validateCountOfGoodsInHands(goodsToBeGiven) {
+    const camels = goodsToBeGiven.filter((ele) => ele === "camel");
+    return this.isHandInLimit(camels.length);
+  }
+
   isAValidExchange(goodsToBeGiven, goodsToBeTaken) {
     return (
       this.areValidGoods(goodsToBeTaken) &&
       this.areGoodsPresentInMarket(goodsToBeTaken) &&
       this.areGoodsPresentInPlayer(goodsToBeGiven) &&
+      this.areExchangingSameGoods(goodsToBeGiven, goodsToBeTaken) &&
       goodsToBeGiven.length === goodsToBeTaken.length &&
-      goodsToBeGiven.length > 1
+      goodsToBeGiven.length > 1 &&
+      this.validateCountOfGoodsInHands(goodsToBeGiven)
     );
   }
 
