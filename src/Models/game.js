@@ -85,6 +85,8 @@ class Game {
     return this.isHandInLimit(camels.length);
   }
 
+  validateCountOfGoodsInExchange(goodsToBeGiven, goodsToBeTaken) {}
+
   isAValidExchange(goodsToBeGiven, goodsToBeTaken) {
     return (
       this.areValidGoods(goodsToBeTaken) &&
@@ -93,7 +95,8 @@ class Game {
       this.areExchangingSameGoods(goodsToBeGiven, goodsToBeTaken) &&
       goodsToBeGiven.length === goodsToBeTaken.length &&
       goodsToBeGiven.length > 1 &&
-      this.validateCountOfGoodsInHands(goodsToBeGiven)
+      this.validateCountOfGoodsInHands(goodsToBeGiven) &&
+      this.validateCountOfGoodsInExchange(goodsToBeGiven, goodsToBeTaken)
     );
   }
 
@@ -148,7 +151,7 @@ class Game {
   }
 
   takeSingleGood(good) {
-    this.currentPlayer.addCards(...good);
+    this.currentPlayer.addCards(good);
     this.market.removeCards(1, ...good);
     this.market.refillMarket(this.deck);
   }
