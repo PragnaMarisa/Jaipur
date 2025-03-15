@@ -95,25 +95,15 @@ class Game {
   validateCountOfGoodsInExchange(goodsToBeGiven, goodsToBeTaken) {
     const occurencesOfGiven = this.countOccurrences(goodsToBeGiven);
     const occurencesOfTaken = this.countOccurrences(goodsToBeTaken);
-    console.log(
-      Object.keys(occurencesOfGiven).every(
-        (good) => this.currentPlayer.countOf(good) >= occurencesOfGiven[good]
-      ),
-      Object.keys(occurencesOfTaken).every((good) => {
-        console.log(this.market.countOf(good), occurencesOfTaken[good], good);
 
-        return this.market.countOf(good) >= occurencesOfTaken[good];
-      })
+    const areValidHand = Object.keys(occurencesOfGiven).every(
+      (good) => this.currentPlayer.countOf(good) >= occurencesOfGiven[good]
+    );
+    const areValidMarket = Object.keys(occurencesOfTaken).every(
+      (good) => this.market.countOf(good) >= occurencesOfTaken[good]
     );
 
-    return (
-      Object.keys(occurencesOfGiven).every(
-        (good) => this.currentPlayer.countOf(good) >= occurencesOfGiven[good]
-      ) &&
-      Object.keys(occurencesOfTaken).every(
-        (good) => this.market.countOf(good) >= occurencesOfTaken[good]
-      )
-    );
+    return areValidHand && areValidMarket;
   }
 
   isAValidExchange(goodsToBeGiven, goodsToBeTaken) {
@@ -219,8 +209,10 @@ class Game {
 
     this.currentPlayer.addTokens(tokensEarned);
     this.currentPlayer.removeCards(count, typeOfGood);
-    if (count > 2)
-      this.currentPlayer.addTokens([this.bonusTokens[count].shift()]);
+    if (count > 2) {
+      const bonus = [this.bonusTokens[count].shift()];
+      if (bonus) this.currentPlayer.addTokens(bonus);
+    }
   };
 
   detailsOfPlayers(players) {

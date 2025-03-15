@@ -2,8 +2,7 @@ import { shuffle } from "../lib.js";
 
 class Bonus3Coins {
   retrieveCoins() {
-    // return [1, 1, 2, 3, 3, 2, 2];
-    return [1, 1];
+    return [1, 1, 2, 3, 3, 2, 2];
   }
 }
 class Bonus4Coins {
