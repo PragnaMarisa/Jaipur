@@ -142,6 +142,14 @@ class Game {
     this.currentPlayer = this.players[this.currentPlayerNo];
   }
 
+  reset() {
+    this.deck = [];
+    this.market = [];
+    this.tokens = [];
+    this.bonusTokens = [];
+    this.players.map((player) => player.reset());
+  }
+
   displayGame() {
     return [
       this.tokens,
@@ -211,7 +219,7 @@ class Game {
     this.currentPlayer.removeCards(count, typeOfGood);
     if (count > 2) {
       const bonus = [this.bonusTokens[count].shift()];
-      if (bonus) this.currentPlayer.addTokens(bonus);
+      if (bonus) this.currentPlayer.addBonus(bonus);
     }
   };
 
@@ -223,7 +231,7 @@ class Game {
   }
 
   detailsOfPlayer(player) {
-    return [player.name, player.score, player.excellence, player.camelToken];
+    return [player.name, player.score(), player.excellence];
   }
 
   validateResults(result) {
@@ -237,6 +245,7 @@ class Game {
 
     const [winner, runner] =
       score1 > score2 ? [palyer1, player2] : [player2, palyer1];
+
     winner.excellence += 1;
     return [winner, runner];
   }

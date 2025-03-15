@@ -9,6 +9,16 @@ class Player {
     this.name = name;
     this.excellence = 0;
     this.playerToken = 0;
+    this.camelToken = 0;
+    this.bonus = [];
+  }
+
+  reset() {
+    this.hand = [];
+    this.camel = [];
+    this.playerToken = 0;
+    this.camelToken = 0;
+    this.bonus = [];
   }
 
   categorizeCards(array) {
@@ -30,12 +40,20 @@ class Player {
     return this.camel.cards;
   }
 
+  calculateBonusTotal = () => this.bonus.reduce((sum, ele) => sum + ele, 0);
+
   score() {
-    return this.token.calculateTotal();
+    return (
+      this.token.calculateTotal() + this.calculateBonusTotal() + this.camelToken
+    );
   }
 
   addTokens(tokens) {
     this.token.addToken(tokens);
+  }
+
+  addBonus(bonus) {
+    this.bonus.push(...bonus);
   }
 
   addCards(goods) {

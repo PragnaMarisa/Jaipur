@@ -61,9 +61,24 @@ class View {
     return [goodsToBeGiven, goodsToBeTaken];
   }
 
-  roundSummary(winner, runner) {
-    console.log("winner", winner.name);
-    console.log("runner", runner.name);
+  displayPlayer(position, name, score, excellence) {
+    console.log(
+      `${position}\nName: ${name}\nScore: ${score}\nExcellence: ${excellence}`
+    );
+  }
+
+  roundSummary(
+    [wName, wScore, wExcellence],
+    [rName, rScore, rExcellence],
+    tie
+  ) {
+    if (tie === "tie") {
+      console.log("Its Tie!");
+      this.displayPlayer("", wName, wScore, wExcellence);
+      this.displayPlayer("", rName, rScore, rExcellence);
+    }
+    this.displayPlayer("Winner 🏆\n", wName, wScore, wExcellence);
+    this.displayPlayer("Runner 🥈\n", rName, rScore, rExcellence);
   }
 }
 
