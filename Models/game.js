@@ -52,7 +52,10 @@ class Game {
 
   updatePlayersScore() {
     const scores = this.players.map((player) => player.score());
-    console.log(scores);
+    const noOfCamels = this.players.map((player) => player.camel.cards.length);
+    const [winner, _, tie] = this.validateResults(noOfCamels);
+    if (!tie) winner.camelToken = 5;
+    return this.detailsOfPlayers(this.validateResults(scores));
   }
 
   isHandInLimit(extra = 0) {
@@ -165,9 +168,38 @@ class Game {
     );
 
     this.currentPlayer.addTokens(tokensEarned);
+
     removeCards(this.currentPlayer.hands(), count, typeOfGood);
     if (count > 2)
       this.currentPlayer.addTokens([this.bonusTokens[count].shift()]);
   };
+
+  detailsOfPlayers(players) {
+    return players.map((player, index) => {
+      if (index < 2) return this.detailsOfPlayer(player);
+      return player;
+    });
+  }
+
+  detailsOfPlayer(player) {
+    return [player.name, player.score, player.excellence, player.camelToken];
+  }
+
+  validateResults(result) {
+    const [score1, score2] = result;
+    const palyer1 = this.players[0];
+    const player2 = this.players[1];
+
+    if (score1 === score2) {
+      return [palyer1, player2, "tie"];
+    }
+
+    return score1 > score2 ? [palyer1, player2] : [player2, palyer1];
+  }
+
+  fetchPlayersSummary() {
+    const excellecnce = this.players.map((player) => player.excellence);
+    return this.validateResults(excellecnce);
+  }
 }
 export { Game };

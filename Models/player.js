@@ -2,6 +2,10 @@ class Hand {
   constructor(cards) {
     this.cards = cards;
   }
+
+  addCards(cards) {
+    this.cards.push(...cards);
+  }
 }
 
 class Camel {
@@ -28,6 +32,8 @@ class Player {
     this.hand;
     this.camel;
     this.name = name;
+    this.excellence = 0;
+    this.playerToken = 0;
   }
 
   categorizeCards(array) {
@@ -61,9 +67,8 @@ class Player {
 
   addCards(goods) {
     const { hand, camels } = this.categorizeCards(goods);
-    console.log(camels, hand);
-    this.hand.cards.push(...hand);
     this.camel.addCards(camels);
+    this.hand.addCards(hand);
   }
 
   isPresent(good) {
