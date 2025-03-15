@@ -63,10 +63,12 @@ class Controller {
   processTradeDecision() {
     const choice = this.view.tradeChoice();
 
+    if (!(choice === 1 || choice === 2)) return this.processTradeDecision();
+
     if (choice === 1) {
       const choice = this.view.takeGoods(this.game.goods);
-      if (!(choice > 0 && choice < 4)) return this.takeGoods();
-      return this.processGoodsChoice(choice);
+      if ([1, 2, 3].includes(choice)) return this.processGoodsChoice(choice);
+      return this.processTradeDecision(choice);
     } else {
       return this.sellGoods();
     }

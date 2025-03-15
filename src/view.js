@@ -15,11 +15,7 @@ class View {
     ],
   };
   tradeChoice() {
-    const choice = parseInt(prompt(this.prompts.tradeChoice[0]));
-
-    if (!(choice === 1 || choice === 2)) {
-      return this.tradeChoice();
-    }
+    const choice = parseInt(prompt(this.prompts.tradeChoice[0]).trim());
 
     return choice;
   }
@@ -34,11 +30,11 @@ class View {
   }
 
   getTypeOfGood = () => {
-    const codeOfGood = parseInt(prompt(this.prompts.sell[0]));
+    const codeOfGood = parseInt(prompt(this.prompts.sell[0]).trim());
     return codeOfGood;
   };
 
-  getNoOfGoodsSold = () => parseInt(prompt(this.prompts.sell[1]));
+  getNoOfGoodsSold = () => parseInt(prompt(this.prompts.sell[1]).trim());
 
   sellGoods(goods) {
     const typeOfGood = this.getTypeOfGood(goods);
@@ -48,19 +44,19 @@ class View {
   }
 
   takeGoods() {
-    const choice = parseInt(prompt(this.prompts.takeCards[0]));
+    const choice = parseInt(prompt(this.prompts.takeCards[0]).trim());
     return choice;
   }
 
   takeSingleGood() {
-    const good = prompt(this.prompts.singleGood[0]);
+    const good = prompt(this.prompts.singleGood[0]).trim();
     return good;
   }
 
   takeSeveralGoods() {
-    let goodsToBeTaken = prompt(this.prompts.severalGoods[0]);
+    let goodsToBeTaken = prompt(this.prompts.severalGoods[0]).trim();
     goodsToBeTaken = goodsToBeTaken.split(" ");
-    let goodsToBeGiven = prompt(this.prompts.severalGoods[1]);
+    let goodsToBeGiven = prompt(this.prompts.severalGoods[1]).trim();
     goodsToBeGiven = goodsToBeGiven.split(" ");
     return [goodsToBeGiven, goodsToBeTaken];
   }

@@ -59,6 +59,10 @@ class Game {
     return this.detailsOfPlayers(this.validateResults(scores));
   }
 
+  isAWinner() {
+    return this.players.map((player) => player.excellence);
+  }
+
   isHandInLimit(extra = 0) {
     return this.currentPlayer.hand.cards.length + extra < 8;
   }
@@ -78,6 +82,7 @@ class Game {
 
   validateCountOfGoodsInHands(goodsToBeGiven) {
     const camels = goodsToBeGiven.filter((ele) => ele === "camel");
+
     return this.isHandInLimit(camels.length);
   }
 
@@ -181,7 +186,6 @@ class Game {
     );
 
     this.currentPlayer.addTokens(tokensEarned);
-
     this.currentPlayer.removeCards(count, typeOfGood);
     if (count > 2)
       this.currentPlayer.addTokens([this.bonusTokens[count].shift()]);
