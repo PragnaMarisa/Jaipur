@@ -197,7 +197,7 @@ class Game {
 
   validateSellingGoods(good, count) {
     return (
-      this.currentPlayer.countOf(good) === count &&
+      this.currentPlayer.countOf(good) >= count &&
       this.isValidGood(good) &&
       this.validateIfPremium(good, count)
     );
@@ -219,19 +219,24 @@ class Game {
 
   detailsOfPlayers(players) {
     return players.map((player, index) => {
-      if (index < 2) return this.player.detailsOfPlayer(player);
+      if (index < 2) return this.players[0].detailsOfPlayer(player);
       return player;
     });
   }
 
   validateTie(player1, player2) {
     const bonusCoinsCount = [player1.countBonus(), player2.countBonus()];
+    console.log(bonusCoinsCount, "bonusCount");
+
     const [_, __, tie] = this.validateResults(bonusCoinsCount, "excellence", 1);
     if (tie) return [_, __, tie];
 
     const tokenCount = [player1.countTokens(), player2.countTokens()];
+    console.log(tokenCount, "tokenCount");
     const result = this.validateResults(tokenCount, "excellence", 1);
     if (result[2]) return result;
+    console.log("Hoping to be tie");
+
     return [player1, player2, "tie"];
   }
 

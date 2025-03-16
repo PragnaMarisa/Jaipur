@@ -9,3 +9,5 @@
 [Done] Added hand limit in taking single goods.
 [Done] Exchange goods when exchanged with goods.
 [] when there are no of goods are less but asked for i should handle
+
+check this : had 3 gold but want to sell only 2 shoul work
