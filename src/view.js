@@ -63,7 +63,7 @@ class View {
 
   displayPlayer(position, name, score, excellence) {
     console.log(
-      `${position}\nName: ${name}\nScore: ${score}\nExcellence: ${excellence}`
+      `${position}\nName: ${name}\nScore: ${score}\nExcellence: ${excellence}\n\n`
     );
   }
 
@@ -77,8 +77,8 @@ class View {
       this.displayPlayer("", wName, wScore, wExcellence);
       this.displayPlayer("", rName, rScore, rExcellence);
     }
-    this.displayPlayer("Winner 🏆\n", wName, wScore, wExcellence);
-    this.displayPlayer("Runner 🥈\n", rName, rScore, rExcellence);
+    this.displayPlayer("Winner 🏆", wName, wScore, wExcellence);
+    this.displayPlayer("Runner 🥈", rName, rScore, rExcellence);
   }
 }
 

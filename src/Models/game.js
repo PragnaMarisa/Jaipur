@@ -133,6 +133,7 @@ class Game {
   }
 
   setUpGame() {
+    this.reset();
     this.createInstances();
     this.tokens = { ...allGoodsTokens };
     this.marketCards = this.market.marketCards;
