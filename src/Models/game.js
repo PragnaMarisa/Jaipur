@@ -54,9 +54,8 @@ class Game {
   updatePlayersScore() {
     const scores = this.players.map((player) => player.score());
     const noOfCamels = this.players.map((player) => player.camel.cards.length);
-    const [winner, _, tie] = this.validateResults(noOfCamels);
-    if (!tie) winner.camelToken = 5;
-    return this.detailsOfPlayers(this.validateResults(scores));
+    this.validateResults(noOfCamels, "camelToken", 5);
+    return this.detailsOfPlayers(this.validateResults(scores, "excellence", 1));
   }
 
   isAWinner() {
@@ -214,7 +213,6 @@ class Game {
       typeOfGood,
       count
     );
-    console.log(tokensEarned, "tokens earned");
 
     this.currentPlayer.addTokens(tokensEarned);
     this.currentPlayer.removeCards(count, typeOfGood);
@@ -235,7 +233,7 @@ class Game {
     return [player.name, player.score(), player.excellence];
   }
 
-  validateResults(result) {
+  validateResults(result, field, value) {
     const [score1, score2] = result;
     const palyer1 = this.players[0];
     const player2 = this.players[1];
@@ -247,7 +245,7 @@ class Game {
     const [winner, runner] =
       score1 > score2 ? [palyer1, player2] : [player2, palyer1];
 
-    winner.excellence += 1;
+    winner[field] += value;
     return [winner, runner];
   }
 
