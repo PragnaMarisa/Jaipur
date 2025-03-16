@@ -17,8 +17,8 @@ class Controller {
     }
 
     // implement these functions in their classes
-    // const [winner, runner] = this.game.fetchPlayersSummary();
-    // this.view.playerSummary(winner, runner);
+    const [winner, runner] = this.game.fetchPlayersSummary();
+    this.view.playerSummary(winner, runner);
   }
 
   processSingleGood() {

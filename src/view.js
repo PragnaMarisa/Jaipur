@@ -80,6 +80,17 @@ class View {
     this.displayPlayer("Winner 🏆", wName, wScore, wExcellence);
     this.displayPlayer("Runner 🥈", rName, rScore, rExcellence);
   }
+
+  playerSummary(winner, runner, tie) {
+    if (tie) {
+      console.log(`${winner[0]} with ${winner[2]} coins`);
+      console.log(`${runner[0]} with ${runner[2]} coins`);
+      return;
+    }
+
+    console.log(`Final winner is ${winner[0]} with ${winner[2]} coins`);
+    console.log(`Runner up is ${runner[0]} with ${runner[2]} coins`);
+  }
 }
 
 export { View };

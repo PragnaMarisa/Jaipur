@@ -251,7 +251,7 @@ class Game {
 
   fetchPlayersSummary() {
     const excellecnce = this.players.map((player) => player.excellence);
-    return this.validateResults(excellecnce);
+    return this.detailsOfPlayers(this.validateResults(excellecnce));
   }
 }
 export { Game };
