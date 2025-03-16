@@ -48,8 +48,19 @@ class Player {
     );
   }
 
+  countBonus() {
+    this.bonus.length;
+  }
+  countTokens() {
+    this.token.length();
+  }
+
   addTokens(tokens) {
     this.token.addToken(tokens);
+  }
+
+  detailsOfPlayer(player) {
+    return [player.name, player.score(), player.excellence, this.playerToken];
   }
 
   addBonus(bonus) {

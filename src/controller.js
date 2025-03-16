@@ -8,7 +8,6 @@ class Controller {
   beginGame() {
     this.game = new Game();
     this.view = new View();
-
     this.game.enrollPlayers();
 
     while (this.RoundNo <= 3 && !this.game.isAWinner()) {
@@ -16,7 +15,6 @@ class Controller {
       this.executeRound();
     }
 
-    // implement these functions in their classes
     const [winner, runner] = this.game.fetchPlayersSummary();
     this.view.playerSummary(winner, runner);
   }

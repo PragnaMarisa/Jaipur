@@ -15,10 +15,6 @@ class Game {
     6: "leather",
   };
   constructor() {
-    this.deck = [];
-    this.market = [];
-    this.tokens = [];
-    this.bonusTokens = [];
     this.currentPlayerNo = 0;
   }
 
@@ -67,9 +63,8 @@ class Game {
   }
 
   validateIfPremium(good, count) {
-    if (["gold", "diamond", "silver"].includes(good)) {
-      return count > 1;
-    }
+    if (["gold", "diamond", "silver"].includes(good)) return count > 1;
+
     return true;
   }
 
@@ -224,29 +219,36 @@ class Game {
 
   detailsOfPlayers(players) {
     return players.map((player, index) => {
-      if (index < 2) return this.detailsOfPlayer(player);
+      if (index < 2) return this.player.detailsOfPlayer(player);
       return player;
     });
   }
 
-  detailsOfPlayer(player) {
-    return [player.name, player.score(), player.excellence];
+  validateTie(player1, player2) {
+    const bonusCoinsCount = [player1.countBonus(), player2.countBonus()];
+    const [_, __, tie] = this.validateResults(bonusCoinsCount, "excellence", 1);
+    if (tie) return [_, __, tie];
+
+    const tokenCount = [player1.countTokens(), player2.countTokens()];
+    const result = this.validateResults(tokenCount, "excellence", 1);
+    if (result[2]) return result;
+    return [player1, player2, "tie"];
   }
 
-  validateResults(result, field, value) {
-    const [score1, score2] = result;
-    const palyer1 = this.players[0];
-    const player2 = this.players[1];
+  validateResults([score1, score2], field, value) {
+    const [palyer1, player2] = this.players;
 
     if (score1 === score2) {
-      return [palyer1, player2, "tie"];
+      return field === "camelToken"
+        ? this.players
+        : this.validateTie(palyer1, player2);
     }
 
-    const [winner, runner] =
+    const [winner, _] =
       score1 > score2 ? [palyer1, player2] : [player2, palyer1];
 
     winner[field] += value;
-    return [winner, runner];
+    return [winner, _];
   }
 
   fetchPlayersSummary() {

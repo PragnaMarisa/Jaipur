@@ -68,17 +68,17 @@ class View {
   }
 
   roundSummary(
-    [wName, wScore, wExcellence],
-    [rName, rScore, rExcellence],
+    [wName, wScore, wExcellence, wCToken],
+    [rName, rScore, rExcellence, rCToken],
     tie
   ) {
     if (tie === "tie") {
       console.log("Its Tie!");
-      this.displayPlayer("", wName, wScore, wExcellence);
-      this.displayPlayer("", rName, rScore, rExcellence);
+      this.displayPlayer("", wName, wScore, wExcellence, wCToken);
+      this.displayPlayer("", rName, rScore, rExcellence, rCToken);
     }
-    this.displayPlayer("Winner 🏆", wName, wScore, wExcellence);
-    this.displayPlayer("Runner 🥈", rName, rScore, rExcellence);
+    this.displayPlayer("Winner 🏆", wName, wScore, wExcellence, wCToken);
+    this.displayPlayer("Runner 🥈", rName, rScore, rExcellence, rCToken);
   }
 
   playerSummary(winner, runner, tie) {
