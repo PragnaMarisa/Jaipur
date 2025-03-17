@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Jaipur Game</title>
+    <style>
+      * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+      body {
+        height: 100vh;
+        background-color: #f0f0f0;
+      }
+      main {
+        display: flex;
+        height: 100%;
+      }
+
+      main > *,
+      #display > *,
+      #goodsCoins > * {
+        background-color: #fff;
+        border: 1px solid black;
+      }
+
+      #goodsCoins > *,
+      #bonusCoins > * {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        height: 10%;
+      }
+      #bonusCoins {
+        height: 40%;
+      }
+      #goodsCoins {
+        width: 25%;
+        height: 100%;
+      }
+      #deck {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-direction: column;
+        width: 25%;
+        height: 100%;
+      }
+      #display {
+        width: 50%;
+        height: 100%;
+      }
+
+      #player1 {
+        width: 100%;
+        height: 30%;
+      }
+      #market {
+        width: 100%;
+        height: 40%;
+      }
+      #player2 {
+        width: 100%;
+        height: 30%;
+      }
+
+      #deckCards {
+        height: 30%;
+      }
+    </style>
+  </head>
+  <body>
+    <main>
+      <div id="goodsCoins">
+        <div id="diamonds">Diamonds</div>
+        <div id="gold">Gold</div>
+        <div id="silver">Silver</div>
+        <div id="cloth">Cloth</div>
+        <div id="spice">Spice</div>
+        <div id="leather">Leather</div>
+        <div id="bonusCoins">
+          Bonus Coins
+          <div id="bonus3">3</div>
+          <div id="bonus4">4</div>
+          <div id="bonus5">5</div>
+          <div id="camelTokens">Camel Token</div>
+          <div id="coinsOfExcellence">Coins of Excellence</div>
+        </div>
+      </div>
+      <div id="deck">
+        <div id="deckCards">Deck Cards</div>
+      </div>
+      <div id="display">
+        <div id="player1">Player1</div>
+        <div id="market">Market</div>
+        <div id="player2">Player2</div>
+      </div>
+    </main>
+  </body>
+</html>
