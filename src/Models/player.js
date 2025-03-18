@@ -78,6 +78,10 @@ class Player {
     return hand.has(good);
   }
 
+  length() {
+    return [...this.hand.cards, ...this.camel.cards].length;
+  }
+
   countOf(good) {
     return [...this.hand.cards, ...this.camel.cards].filter((e) => e === good)
       .length;

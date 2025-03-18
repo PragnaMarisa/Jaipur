@@ -1,5 +1,6 @@
-import { View } from "./view.js";
+import { View } from "../html/htmlView.js";
 import { Game } from "./Models/game.js";
+// import node from "lodash";
 
 class Controller {
   constructor() {
@@ -7,16 +8,19 @@ class Controller {
   }
   beginGame() {
     this.game = new Game();
-    this.view = new View();
+    const parents = ["goodsCoins", "deck", "display"].map((id) =>
+      document.getElementById(id)
+    );
+    this.view = new View(parents);
     this.game.enrollPlayers();
 
-    while (this.RoundNo <= 3 && !this.game.isAWinner()) {
-      this.game.setUpGame();
-      this.executeRound();
-    }
+    // while (this.RoundNo <= 3 && !this.game.isAWinner()) {
+    this.game.setUpGame();
+    this.executeRound();
+    // }
 
-    const [winner, runner] = this.game.fetchPlayersSummary();
-    this.view.playerSummary(winner, runner);
+    // const [winner, runner] = this.game.fetchPlayersSummary();
+    // this.view.playerSummary(winner, runner);
   }
 
   processSingleGood() {
@@ -48,43 +52,74 @@ class Controller {
     return choices[choice]();
   }
 
-  sellGoods() {
-    const [goodNo, count] = this.view.sellGoods();
+  sellGoods(goodNo, count) {
     const good = this.game.goods[goodNo];
     if (this.game.validateSellingGoods(good, count)) {
       return this.game.sellGoods(good, count);
     }
-
-    return this.processTradeDecision();
+    console.log("nothing more");
   }
 
-  processTradeDecision() {
-    const choice = this.view.tradeChoice();
+  processTradeDecision(tChoice, eChoice, data) {
+    console.log("called processTradeDecision");
 
-    if (!(choice === 1 || choice === 2)) return this.processTradeDecision();
-
-    if (choice === 1) {
-      const choice = this.view.takeGoods(this.game.goods);
-      if ([1, 2, 3].includes(choice)) return this.processGoodsChoice(choice);
-      return this.processTradeDecision(choice);
+    if (tChoice === 1) {
+      if ([1, 2, 3].includes(eChoice)) return this.processGoodsChoice(eChoice);
     } else {
-      return this.sellGoods();
+      // const counts = node.countBy(data);
+      console.log(data);
+
+      return this.sellGoods(
+        Object.keys(counts)[0],
+        counts[Object.keys(counts)[0]]
+      );
     }
+  }
+
+  tradeChoice() {
+    const market = document.getElementById("market");
+    console.log("tradeChoice");
+
+    market.addEventListener("click", (event) => {
+      if (event.target.id === "take-goods") {
+        return this.createTakingChoices();
+      }
+      if (event.target.id === "sell-goods") {
+        const x = this.view.sellGoods();
+        console.log(x);
+
+        return [2, 0, x];
+      }
+    });
+  }
+
+  displayGame() {
+    const displayData = this.game.displayGame();
+    this.view.displayGame(displayData);
   }
 
   executeRound() {
-    while (!this.game.isEndOfRound()) {
-      // console.clear();
-      const displayData = this.game.displayGame();
-      this.view.displayGame(...displayData);
-      this.processTradeDecision();
-      // this.view.displayGame(...displayData);
-      this.game.changePlayer();
-    }
+    // while (!this.game.isEndOfRound()) {
+    // console.clear();
+    this.displayGame();
+    const market = document.getElementById("market");
+    market.addEventListener("click", (event) => {
+      if (["sell-goods"].includes(event.target.id)) {
+        const [choice, option, data] = this.tradeChoice();
+        console.log("readyy?");
+        console.log(choice, option, data);
+        console.log("the end");
+      }
+    });
 
-    const [winner, runner] = this.game.updatePlayersScore();
-    this.view.roundSummary(winner, runner);
-    this.RoundNo += 1;
+    // this.processTradeDecision(choice, option, data);
+    // this.game.changePlayer();
+    // this.view.displayGame(displayData);
+    // }
+
+    // const [winner, runner] = this.game.updatePlayersScore();
+    // this.view.roundSummary(winner, runner);
+    // this.RoundNo += 1;
   }
 }
 

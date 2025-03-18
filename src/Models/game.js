@@ -134,7 +134,9 @@ class Game {
     this.tokens = this.tokenCollection.tokens;
     this.bonusTokens = { ...allBonusTokens() };
     this.initialisePlayerCards();
+    this.camelToken = "camelToken";
     this.currentPlayer = this.players[this.currentPlayerNo];
+    this.anotherPlayer = this.players[(this.currentPlayerNo + 1) % 2];
   }
 
   reset() {
@@ -153,6 +155,12 @@ class Game {
       this.currentPlayer.score(),
       this.currentPlayer.hands(),
       this.currentPlayer.camels(),
+      this.anotherPlayer.name,
+      this.anotherPlayer.length(),
+      [3, 4, 5].map((index) => this.bonusTokens[index].length),
+      this.camelToken,
+      ["seal", "seal", "seal"],
+      this.deck.length(),
     ];
   }
 
