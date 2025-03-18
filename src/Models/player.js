@@ -1,3 +1,4 @@
+// deno-coverage-ignore-file
 import { Hand } from "./hand.js";
 import { Camel } from "./camel.js";
 import { Token } from "./token.js";

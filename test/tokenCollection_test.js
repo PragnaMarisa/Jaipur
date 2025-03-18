@@ -1,6 +1,6 @@
 import { assertEquals } from "jsr:@std/assert/";
 import { describe, it } from "jsr:@std/testing/bdd";
-import { TokenCollection } from "../src/Models/tokenCollection.js";
+import { TokenCollection } from "../src/models/tokenCollection.js";
 
 describe("TokenCollection Class", () => {
   describe("Constructor", () => {

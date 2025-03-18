@@ -1,6 +1,6 @@
 import { assertEquals } from "jsr:@std/assert/";
 import { describe, it } from "jsr:@std/testing/bdd";
-import { Camel } from "../src/Models/camel.js";
+import { Camel } from "../src/models/camel.js";
 
 describe("Camel Class", () => {
   describe("Constructor", () => {

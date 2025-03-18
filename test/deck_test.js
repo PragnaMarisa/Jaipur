@@ -1,6 +1,6 @@
 import { assertEquals } from "jsr:@std/assert/";
 import { describe, it } from "jsr:@std/testing/bdd";
-import { Deck } from "../src/Models/deck.js";
+import { Deck } from "../src/models/deck.js";
 
 describe("Deck Class", () => {
   describe("Constructor", () => {
@@ -9,7 +9,6 @@ describe("Deck Class", () => {
       assertEquals(deck.cards, ["gold", "silver", "spice"]);
     });
   });
-
   describe("shuffle()", () => {
     it("should shuffle the deck randomly", () => {
       const deck = new Deck(["gold", "silver", "spice", "cloth"]);

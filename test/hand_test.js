@@ -1,6 +1,6 @@
 import { assertEquals } from "jsr:@std/assert/";
 import { describe, it } from "jsr:@std/testing/bdd";
-import { Hand } from "../src/Models/hand.js";
+import { Hand } from "../src/models/hand.js";
 
 describe("Hand Class", () => {
   describe("Constructor", () => {

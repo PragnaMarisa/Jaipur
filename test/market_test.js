@@ -1,6 +1,6 @@
 import { assertEquals, assertArrayIncludes } from "jsr:@std/assert/";
 import { describe, it } from "jsr:@std/testing/bdd";
-import { Market } from "../src/Models/market.js";
+import { Market } from "../src/models/market.js";
 
 describe("Market Class", () => {
   describe("Constructor", () => {

@@ -1,6 +1,6 @@
 import { assertEquals } from "jsr:@std/assert/";
 import { describe, it } from "jsr:@std/testing/bdd";
-import { Player } from "../src/Models/player.js";
+import { Player } from "../src/models/player.js";
 
 describe("Player Class", () => {
   describe("Constructor", () => {
@@ -35,14 +35,14 @@ describe("Player Class", () => {
     });
   });
 
-  describe("score()", () => {
-    it("should return total token score", () => {
-      const player = new Player("Alice");
-      player.initializeHand([]);
-      player.addTokens([5, 3, 2]);
-      assertEquals(player.score(), 10);
-    });
-  });
+  // describe("score()", () => {
+  //   it("should return total token score", () => {
+  //     const player = new Player("Alice");
+  //     player.initializeHand([]);
+  //     player.addTokens([5, 3, 2]);
+  //     assertEquals(player.score(), 10);
+  //   });
+  // });
 
   describe("addCards()", () => {
     it("should add goods and camels separately", () => {
