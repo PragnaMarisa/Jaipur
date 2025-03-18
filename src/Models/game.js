@@ -21,6 +21,7 @@ class Game {
   changePlayer = () => {
     this.currentPlayerNo = (this.currentPlayerNo + 1) % 2;
     this.currentPlayer = this.players[this.currentPlayerNo];
+    this.anotherPlayer = this.players[(this.currentPlayerNo + 1) % 2];
   };
 
   initialisePlayerCards() {
