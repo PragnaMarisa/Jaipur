@@ -101,10 +101,10 @@ class View {
 
   createButton(parentId, id, text) {
     if (document.getElementById(id)) return;
-    const div = document.createElement("button");
-    div.id = id;
-    div.textContent = text;
-    parentId.appendChild(div);
+    const button = document.createElement("button");
+    button.id = id;
+    button.textContent = text;
+    parentId.appendChild(button);
   }
 
   createTakingChoices() {

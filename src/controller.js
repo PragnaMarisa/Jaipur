@@ -8,12 +8,17 @@ class Controller {
     this.game = game;
     this.view = view;
     this.#roundNo = 1;
+    this.game.enrollPlayers();
   }
 
   beginGame() {
-    this.game.enrollPlayers();
     this.game.setUpGame();
     this.executeRound();
+
+    if (this.#roundNo <= 3 && this.game.isAWinner()) {
+      const [winner, runner] = this.game.fetchPlayersSummary();
+      this.view.playerSummary(winner, runner);
+    }
   }
 
   handleMarketClick = (event) => {
@@ -47,13 +52,31 @@ class Controller {
   }
 
   processExchangeGoods() {
-    const [goodsToBeGiven, goodsToBeTaken] = this.view.takeSeveralGoods();
-
-    if (this.game.isAValidExchange(goodsToBeGiven, goodsToBeTaken)) {
-      this.game.takeSeveralGoods(goodsToBeGiven, goodsToBeTaken);
-    } else {
-      this.processTradeDecision();
-    }
+    const goodsToBeGiven = [];
+    const goodsToBeTaken = [];
+    const market = document.getElementById("market");
+    this.view.createButton(market, "trade", "Trade");
+    const display = document.getElementById("display");
+    display.addEventListener("click", (event) => {
+      if (event.target.className === "pCards") {
+        goodsToBeGiven.push(event.target.textContent);
+        event.target.remove();
+      }
+      if (event.target.className === "market-card") {
+        goodsToBeTaken.push(event.target.textContent);
+        event.target.remove();
+      }
+      if (event.target.id === "trade") {
+        if (this.game.isAValidExchange(goodsToBeGiven, goodsToBeTaken)) {
+          this.game.takeSeveralGoods(goodsToBeGiven, goodsToBeTaken);
+          event.target.remove();
+          document.getElementById("take-choice").remove();
+          this.processNextPlayer();
+        }
+        this.displayGame();
+        this.tradeChoice();
+      }
+    });
   }
 
   processGoodsChoice() {
@@ -125,6 +148,7 @@ class Controller {
     if (this.game.isEndOfRound()) {
       const [winner, runner] = this.game.updatePlayersScore();
       console.log(winner, runner);
+      this.beginGame();
     }
   }
 }
