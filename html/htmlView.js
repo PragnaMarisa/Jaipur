@@ -24,6 +24,10 @@ class View {
 
   printMarketCards(marketCards) {
     this.displayCoins("marketCards", marketCards, "market-card");
+    const nav = document.getElementById("nav");
+    ["sell-goods", "take-goods"].forEach((id) => {
+      this.createButton(nav, id, id.split("-").join(" "));
+    });
   }
 
   displayCurrPlayerDetails(name, score, hands, camels) {
@@ -59,6 +63,7 @@ class View {
       (ele) => (ele.innerHTML = "")
     );
     document.getElementById("deck").innerHTML = "";
+    document.getElementById("nav").innerHTML = "";
     Array.from(document.getElementById("bonusCoins").children).forEach(
       (ele) => (ele.innerHTML = "")
     );
@@ -108,16 +113,13 @@ class View {
   }
 
   createTakingChoices() {
-    const div = document.createElement("div");
-    div.id = "take-choice";
+    const nav = document.getElementById("nav");
     ["one-good", "mul-good", "all-camels"].forEach((id) => {
       const button = document.createElement("button");
       button.textContent = id;
       button.id = id;
-      div.appendChild(button);
+      nav.appendChild(button);
     });
-
-    document.getElementById("market").appendChild(div);
   }
 }
 

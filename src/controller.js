@@ -17,66 +17,77 @@ class Controller {
 
     if (this.#roundNo <= 3 && this.game.isAWinner()) {
       const [winner, runner] = this.game.fetchPlayersSummary();
-      this.view.playerSummary(winner, runner);
+      console.log(winner, runner);
     }
   }
 
   handleMarketClick = (event) => {
     const actions = {
       "take-goods": () => {
+        this.clearEventListeners();
+        document.getElementById("nav").innerHTML = "";
         this.view.createTakingChoices();
         this.processGoodsChoice();
       },
-      "sell-goods": this.sellGoods.bind(this),
+      "sell-goods": () => {
+        this.clearEventListeners();
+        this.sellGoods();
+      },
     };
     if (actions[event.target.id]) actions[event.target.id]();
   };
 
-  handleSingleGoodClick(event) {
+  handleSingleGoodClick = (event) => {
     if (event.target.className === "market-card") {
       const good = event.target.textContent;
 
       if (this.game.validateSingleGood(good)) {
         event.target.remove();
         this.game.takeSingleGood([good]);
-        document.getElementById("take-choice").remove();
+        document.getElementById("nav").innerHTML = "";
         this.processNextPlayer();
       }
     }
-  }
+  };
 
   processSingleGood() {
     const market = document.getElementById("market");
-    market.removeEventListener("click", this.handleSingleGoodClick.bind(this));
-    market.addEventListener("click", this.handleSingleGoodClick.bind(this));
+    // market.removeEventListener("click", this.handleSingleGoodClick);
+    market.addEventListener("click", this.handleSingleGoodClick, {
+      once: true,
+    });
   }
+
+  exchangeGoodsHandler = (event, goodsToBeGiven, goodsToBeTaken) => {
+    if (event.target.className === "pCards") {
+      goodsToBeGiven.push(event.target.textContent);
+      event.target.remove();
+    }
+    if (event.target.className === "market-card") {
+      goodsToBeTaken.push(event.target.textContent);
+      event.target.remove();
+    }
+    if (event.target.id === "trade") {
+      if (this.game.isAValidExchange(goodsToBeGiven, goodsToBeTaken)) {
+        this.game.takeSeveralGoods(goodsToBeGiven, goodsToBeTaken);
+        document.getElementById("nav").innerHTML = "";
+        this.processNextPlayer();
+      }
+      this.displayGame();
+    }
+  };
 
   processExchangeGoods() {
     const goodsToBeGiven = [];
     const goodsToBeTaken = [];
-    const market = document.getElementById("market");
-    this.view.createButton(market, "trade", "Trade");
+    const nav = document.getElementById("nav");
+    nav.innerHTML = "";
+    this.view.createButton(nav, "trade", "Trade");
     const display = document.getElementById("display");
-    display.addEventListener("click", (event) => {
-      if (event.target.className === "pCards") {
-        goodsToBeGiven.push(event.target.textContent);
-        event.target.remove();
-      }
-      if (event.target.className === "market-card") {
-        goodsToBeTaken.push(event.target.textContent);
-        event.target.remove();
-      }
-      if (event.target.id === "trade") {
-        if (this.game.isAValidExchange(goodsToBeGiven, goodsToBeTaken)) {
-          this.game.takeSeveralGoods(goodsToBeGiven, goodsToBeTaken);
-          event.target.remove();
-          document.getElementById("take-choice").remove();
-          this.processNextPlayer();
-        }
-        this.displayGame();
-        this.tradeChoice();
-      }
-    });
+
+    this.boundExchangeGoodsHandler = (event) =>
+      this.exchangeGoodsHandler(event, goodsToBeGiven, goodsToBeTaken);
+    display.addEventListener("click", this.boundExchangeGoodsHandler);
   }
 
   processGoodsChoice() {
@@ -85,15 +96,15 @@ class Controller {
       "mul-good": this.processExchangeGoods.bind(this),
       "all-camels": () => {
         this.game.takeAllCamels();
+        document.getElementById("nav").innerHTML = "";
         this.processNextPlayer();
-        document.getElementById("take-choice").remove();
       },
     };
-
     const market = document.getElementById("market");
-    market.addEventListener("click", (event) => {
+    this.boundMarketHandler = (event) => {
       if (choices[event.target.id]) choices[event.target.id]();
-    });
+    };
+    market.addEventListener("click", this.boundMarketHandler);
   }
 
   processSelling(goods) {
@@ -102,28 +113,38 @@ class Controller {
       const count = goods.length;
       if (this.game.validateSellingGoods(good, count)) {
         this.game.sellGoods(good, count);
+        document.getElementById("nav").innerHTML = "";
         this.processNextPlayer();
       }
     }
     this.displayGame();
-    this.tradeChoice();
   }
+
+  sellHandler = (event, goods) => {
+    if (event.target.id === "sell-now") {
+      event.target.remove();
+      this.clearEventListeners();
+      this.processSelling(goods);
+    }
+    if (event.target.className === "pCards") {
+      goods.push(event.target.textContent);
+      event.target.remove();
+    }
+  };
 
   sellGoods() {
     const goods = [];
-    const market = document.getElementById("market");
-    this.view.createButton(market, "sell-now", "Sell Now");
+    const nav = document.getElementById("nav");
+    nav.innerHTML = "";
+    this.view.createButton(nav, "sell-now", "Sell Now");
+    const display = document.getElementById("display");
 
-    document.getElementById("display").addEventListener("click", (event) => {
-      if (event.target.id === "sell-now") {
-        event.target.remove();
-        this.processSelling(goods);
-      }
-      if (event.target.className === "pCards") {
-        goods.push(event.target.textContent);
-        event.target.remove();
-      }
-    });
+    // if (this.boundSellHandler) {
+    //   display.removeEventListener("click", this.boundSellHandler);
+    // }
+
+    this.boundSellHandler = (event) => this.sellHandler(event, goods);
+    display.addEventListener("click", this.boundSellHandler);
   }
 
   tradeChoice() {
@@ -133,8 +154,20 @@ class Controller {
   }
 
   processNextPlayer() {
+    this.clearEventListeners();
     this.game.changePlayer();
     this.executeRound();
+  }
+
+  clearEventListeners() {
+    const market = document.getElementById("market");
+    const display = document.getElementById("display");
+
+    market.removeEventListener("click", this.handleMarketClick);
+    market.removeEventListener("click", this.boundSingleGoodHandler);
+    market.removeEventListener("click", this.boundMarketHandler);
+    display.removeEventListener("click", this.boundSellHandler);
+    display.removeEventListener("click", this.boundExchangeGoodsHandler);
   }
 
   displayGame() {
