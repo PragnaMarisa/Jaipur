@@ -11,5 +11,8 @@
     "useTabs": false,
     "singleQuote": false,
     "proseWrap": "preserve"
+  },
+  "imports": {
+    "chalk": "jsr:@nothing628/chalk@^1.0.1"
   }
 }

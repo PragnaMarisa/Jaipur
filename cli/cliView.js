@@ -1,5 +1,3 @@
-import chalk from "chalk";
-
 class View {
   prompts = {
     tradeChoice: ["sell or take cards? \n 1.take cards\n 2.sell cards.\n"],
@@ -22,38 +20,13 @@ class View {
     return choice;
   }
 
-  displayAllGoods(tokens, marketCards, hands, camels) {
-    const tokenEntries = Object.entries(tokens);
-    const marketText = marketCards.join("  ");
-    const playerText = hands.join("  ");
-    const camelsText = camels.length > 0 ? camels.join("  ") : "";
-
-    tokenEntries.forEach(([type, count], index) => {
-      const tokenLine = `${chalk.green(type)}: ${count}`.padEnd(30);
-      const marketLine = index === 0 ? marketText.padEnd(40) : "";
-      const playerLine = index === 0 ? playerText : "";
-      console.log(`${tokenLine}${chalk.green(marketLine)}${playerLine}`);
-      if (index === 0 && camelsText)
-        console.log(" ".repeat(30 + 40) + camelsText);
-    });
-  }
-
   displayGame(tokens, marketCards, name, score, hands, camels) {
-    console.log(
-      `${chalk.yellow.bold("PLAYER:")} ${name} ${chalk.yellow.bold(
-        `(Score: ${score})`
-      )}`
-    );
-    console.log(chalk.gray("-".repeat(100)));
-    console.log(
-      chalk.red.bold("TOKENS").padEnd(60) +
-        chalk.red.bold("MARKET").padEnd(60) +
-        chalk.red.bold("PLAYER'S CARDS")
-    );
-    console.log(chalk.gray("-".repeat(100)));
-
-    this.displayAllGoods(tokens, marketCards, hands, camels);
-    console.log(chalk.gray("-".repeat(100)));
+    console.log(`TOKENS : `, tokens);
+    console.log(`MARKET : `, marketCards);
+    console.log(`PLAYER NAME : `, name);
+    console.log(`CURRENT SCORE : `, score);
+    console.log(`HAND : `, hands);
+    console.log(`CAMELS : `, camels);
   }
 
   getTypeOfGood = () => {

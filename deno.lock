@@ -1,6 +1,7 @@
 {
   "version": "4",
   "specifiers": {
+    "jsr:@nothing628/chalk@^1.0.1": "1.0.1",
     "jsr:@std/assert@*": "1.0.10",
     "jsr:@std/assert@^1.0.10": "1.0.10",
     "jsr:@std/internal@^1.0.5": "1.0.5",
@@ -10,6 +11,9 @@
     "npm:nodeash@*": "3.0.9"
   },
   "jsr": {
+    "@nothing628/chalk@1.0.1": {
+      "integrity": "d89ab2f1a9674ce7134b791ea8f53aec728d3e00ad89d08c44785bff342d2ef6"
+    },
     "@std/assert@1.0.10": {
       "integrity": "59b5cbac5bd55459a19045d95cc7c2ff787b4f8527c0dd195078ff6f9481fbb3",
       "dependencies": [
@@ -171,5 +175,10 @@
     "ws@8.17.1": {
       "integrity": "sha512-6XQFvXTkbfUOZOKKILFG1PDK2NDQs4azKQl26T0YS5CxqWLgXajbPZ+h4gZekJyRqFU8pvnbAbbs/3TgRPy+GQ=="
     }
+  },
+  "workspace": {
+    "dependencies": [
+      "jsr:@nothing628/chalk@^1.0.1"
+    ]
   }
 }
