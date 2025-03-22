@@ -20,10 +20,32 @@ class View {
     return choice;
   }
 
-  displayGame({ coinsPart, currentPlayer, anotherPlayer }) {
+  displayMessage({ message }) {
+    console.log(message);
+  }
+
+  parse(input) {
+    if ("message" in input) return this.displayMessage(input);
+    if ("task" in input) return this[input.task]();
+    if ("error" in input) return this.displayError(input);
+    if ("currentPlayer" in input) {
+      this.displayGame(input.coinsPart, input.currentPlayer);
+      return this.tradeChoice();
+    }
+
+    if ("anotherPlayer" in input) {
+      this.displayGame(input.coinsPart, input.anotherPlayer);
+      this.displayMessage({
+        message: "Another Player is Playing....\nPlease Wait",
+      });
+    }
+  }
+
+  displayGame(coinsPart, player) {
+    console.clear();
     console.log(`TOKENS : `, coinsPart.goods);
     console.log(`MARKET : `, coinsPart.market);
-    this.displayGameOfPlayer(currentPlayer);
+    this.displayGameOfPlayer(player);
   }
 
   displayGameOfPlayer(player) {
@@ -40,8 +62,8 @@ class View {
 
   getNoOfGoodsSold = () => parseInt(prompt(this.prompts.sell[1]).trim());
 
-  sellGoods(goods) {
-    const typeOfGood = this.getTypeOfGood(goods);
+  sellGoods() {
+    const typeOfGood = this.getTypeOfGood();
     const count = this.getNoOfGoodsSold();
 
     return [typeOfGood, count];

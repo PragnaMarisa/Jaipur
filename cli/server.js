@@ -1,4 +1,5 @@
 import { Controller } from "./dummycontroller.js";
+import _ from "lodash";
 
 class Server {
   constructor(portNo) {
@@ -11,41 +12,88 @@ class Server {
 
   async listen() {
     for await (const connection of this.listener) {
-      const name = (await this.read(connection)).trim();
+      const name = (await this.readMsg(connection)).trim();
       this.connections.push({ [name]: connection });
 
       if (this.connections.length === 2) {
         this.names = this.connections.map((obj) => Object.keys(obj)[0]);
-        this.sendMsgToConnections(null, "server", "Begining the game..");
+        this.sendMsgToAll("Begining the game..");
         this.controller.beginGame(...this.names);
+        this.controller.startGame();
+        this.executeRound();
         return;
       }
 
       if (this.connections.length === 1) {
-        const waitMsg = `Hey! ${name}. Wait for another player to join...`;
-        await this.write(waitMsg, connection);
+        const waitMsg = {
+          message: `Hey! ${name}. Wait for another player to join...`,
+        };
+        await this.writeMsg(waitMsg, connection);
       }
     }
   }
 
-  async write(msg, connection) {
+  async writeMsg(msg, connection) {
     const encoder = new TextEncoder();
-    await connection.write(encoder.encode(msg));
+    await connection.write(encoder.encode(JSON.stringify(msg)));
   }
 
-  sendMsgToConnections(connection, name, msg) {
-    const remainingConnections = this.connections.filter(
-      (obj) => Object.values(obj)[0] !== connection
-    );
+  getConn(name) {
+    return Object.values(_.find(this.connections, (o) => name in o))[0];
+  }
 
-    remainingConnections.map(async (obj) => {
-      const [_, connection] = Object.entries(obj)[0];
+  sendGameState() {
+    const { coinsPart, currentPlayer, anotherPlayer } =
+      this.controller.displayGame();
+
+    this.curCon = this.getConn(currentPlayer.name);
+    this.anoCon = this.getConn(anotherPlayer.name);
+
+    this.writeMsg({ coinsPart, currentPlayer }, this.curCon);
+    this.writeMsg({ coinsPart, anotherPlayer }, this.anoCon);
+  }
+
+  async processTrade(choice) {
+    while (true) {
+      console.log(choice);
+      const tradeResult = this.controller.processTradeDecision(...choice);
+
+      if (!tradeResult?.task) return tradeResult;
+
+      this.writeMsg(tradeResult, this.curCon);
+      const subchoice = await this.getPlayerInput(this.curCon);
+      choice.push(subchoice.input[0]);
+    }
+  }
+
+  async executeRound() {
+    this.sendGameState();
+    if (!this.controller.game.isEndOfRound()) {
+      let choice = await this.getPlayerInput(this.curCon);
+      choice = choice.input;
+      const x = await this.processTrade(choice);
+      console.log(x);
+      if ("sucess" in x) {
+        this.controller.changePlayer();
+      }
+      this.executeRound();
+    }
+  }
+
+  async getPlayerInput(conn) {
+    const rawInput = await this.readMsg(conn);
+    return JSON.parse(rawInput);
+  }
+
+  sendMsgToAll(msg) {
+    const connections = this.connections.map((obj) => Object.values(obj)[0]);
+    connections.map(async (conn) => {
       const encoder = new TextEncoder();
-      await connection.write(encoder.encode(`Client ${name} Text you: ${msg}`));
+      await conn.write(encoder.encode(JSON.stringify({ message: msg })));
     });
   }
 
-  async read(connection) {
+  async readMsg(connection) {
     const buf = new Uint8Array(100);
     const bytesCount = await connection.read(buf);
     const decoder = new TextDecoder();
@@ -58,8 +106,8 @@ class Server {
   async handleConnection(connection, name) {
     try {
       while (true) {
-        const msg = await this.read(connection);
-        this.sendMsgToConnections(connection, name, msg);
+        const msg = await this.readMsg(connection);
+        this.sendMsgToAll(connection, name, msg);
       }
     } catch {
       console.log("closed");

@@ -74,7 +74,7 @@ class Game {
   }
 
   areExchangingSameGoods(goodsToBeGiven, goodsToBeTaken) {
-    return _.intersection(goodsToBeGiven, goodsToBeTaken) === 0;
+    return _.intersection(goodsToBeGiven, goodsToBeTaken).length === 0;
   }
 
   validateCountOfGoodsInHands(goodsToBeGiven) {

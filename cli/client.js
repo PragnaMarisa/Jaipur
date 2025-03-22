@@ -1,4 +1,5 @@
 import { View } from "./view.js";
+import _ from "lodash";
 
 class Client {
   constructor(portNo, name) {
@@ -9,6 +10,7 @@ class Client {
     this.stdin = Deno.stdin;
     this.reader = this.stdin.readable.getReader();
     this.decoder = new TextDecoder();
+    this.view = new View();
   }
 
   async connect() {
@@ -26,25 +28,23 @@ class Client {
     try {
       const buf = new Uint8Array(1024);
       const bytesCount = await this.connection.read(buf);
-      if (bytesCount === null) return;
       const msg = this.decoder.decode(buf.slice(0, bytesCount));
-      const { content, isCurrPlaying } = JSON.parse(msg);
-      console.log({ content, isCurrPlaying });
-      this.read();
+      console.log(msg);
+
+      const validResponse = _.pickBy(JSON.parse(msg));
+      const returned = this.view.parse(validResponse);
+      console.log(returned);
+      if (returned) this.writeMsg(JSON.stringify({ input: [returned] }));
+
+      this.readData();
     } catch (err) {
       console.error("Read error:", err.message);
     }
   }
 
-  async write() {
+  async writeMsg(data) {
     try {
-      const { value, _ } = await this.reader.read();
-      const msgToBeGiven = this.decoder.decode(value);
-      console.log(msgToBeGiven);
-
-      if (msgToBeGiven === null) return;
-      await this.connection.write(this.encoder.encode(msgToBeGiven));
-      this.write();
+      await this.connection.write(this.encoder.encode(data));
     } catch (err) {
       console.error("Write error:", err.message);
     }
