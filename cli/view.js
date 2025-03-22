@@ -20,13 +20,17 @@ class View {
     return choice;
   }
 
-  displayGame(tokens, marketCards, name, score, hands, camels) {
-    console.log(`TOKENS : `, tokens);
-    console.log(`MARKET : `, marketCards);
-    console.log(`PLAYER NAME : `, name);
-    console.log(`CURRENT SCORE : `, score);
-    console.log(`HAND : `, hands);
-    console.log(`CAMELS : `, camels);
+  displayGame({ coinsPart, currentPlayer, anotherPlayer }) {
+    console.log(`TOKENS : `, coinsPart.goods);
+    console.log(`MARKET : `, coinsPart.market);
+    this.displayGameOfPlayer(currentPlayer);
+  }
+
+  displayGameOfPlayer(player) {
+    console.log(`PLAYER NAME : `, player.name);
+    console.log(`CURRENT SCORE : `, player.score);
+    console.log(`HAND : `, player.hands);
+    console.log(`CAMELS : `, player.camels);
   }
 
   getTypeOfGood = () => {

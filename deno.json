@@ -11,5 +11,8 @@
     "useTabs": false,
     "singleQuote": false,
     "proseWrap": "preserve"
+  },
+  "imports": {
+    "lodash": "npm:lodash@^4.17.21"
   }
 }

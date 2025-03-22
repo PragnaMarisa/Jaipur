@@ -4,6 +4,7 @@ import { allGoodsTokens, TokenCollection } from "./tokenCollection.js";
 import { Market } from "./market.js";
 import { Player } from "./player.js";
 import { allBonusTokens } from "./bonusTokens.js";
+import _ from "lodash";
 
 class Game {
   goods = {
@@ -16,6 +17,7 @@ class Game {
   };
   constructor() {
     this.currentPlayerNo = 0;
+    this.roundNo = 0;
   }
 
   changePlayer = () => {
@@ -56,7 +58,10 @@ class Game {
   }
 
   isAWinner() {
-    return this.players.map((player) => player.excellence).includes(2);
+    return (
+      this.players.map((player) => player.excellence).includes(2) &&
+      this.roundNo <= 3
+    );
   }
 
   isHandInLimit(extra = 0) {
@@ -64,15 +69,12 @@ class Game {
   }
 
   validateIfPremium(good, count) {
-    if (["gold", "diamond", "silver"].includes(good)) return count > 1;
-
-    return true;
+    const premium = new Set(["gold", "diamond", "silver"]);
+    return premium.has(good) ? count > 1 : true;
   }
 
   areExchangingSameGoods(goodsToBeGiven, goodsToBeTaken) {
-    const set1 = new Set(goodsToBeGiven);
-    const set2 = new Set(goodsToBeTaken);
-    return set1.intersection(set2).size === 0;
+    return _.intersection(goodsToBeGiven, goodsToBeTaken) === 0;
   }
 
   validateCountOfGoodsInHands(goodsToBeGiven) {
@@ -80,16 +82,9 @@ class Game {
     return this.isHandInLimit(camels.length);
   }
 
-  countOccurrences(arr) {
-    return arr.reduce((acc, curr) => {
-      acc[curr] = (acc[curr] || 0) + 1;
-      return acc;
-    }, {});
-  }
-
   validateCountOfGoodsInExchange(goodsToBeGiven, goodsToBeTaken) {
-    const occurencesOfGiven = this.countOccurrences(goodsToBeGiven);
-    const occurencesOfTaken = this.countOccurrences(goodsToBeTaken);
+    const occurencesOfGiven = _.countBy(goodsToBeGiven);
+    const occurencesOfTaken = _.countBy(goodsToBeTaken);
 
     const areValidHand = Object.keys(occurencesOfGiven).every(
       (good) => this.currentPlayer.countOf(good) >= occurencesOfGiven[good]
@@ -102,21 +97,22 @@ class Game {
   }
 
   isAValidExchange(goodsToBeGiven, goodsToBeTaken) {
-    return (
-      this.areValidGoods(goodsToBeTaken) &&
-      this.areGoodsPresentInMarket(goodsToBeTaken) &&
-      this.areGoodsPresentInPlayer(goodsToBeGiven) &&
-      this.areExchangingSameGoods(goodsToBeGiven, goodsToBeTaken) &&
-      goodsToBeGiven.length === goodsToBeTaken.length &&
-      goodsToBeGiven.length > 1 &&
-      this.validateCountOfGoodsInHands(goodsToBeGiven) &&
-      this.validateCountOfGoodsInExchange(goodsToBeGiven, goodsToBeTaken)
-    );
+    const isValidExchange = _.every([
+      this.areValidGoods(goodsToBeTaken),
+      this.areGoodsPresentInMarket(goodsToBeTaken),
+      this.areGoodsPresentInPlayer(goodsToBeGiven),
+      this.areExchangingSameGoods(goodsToBeGiven, goodsToBeTaken),
+      goodsToBeGiven.length === goodsToBeTaken.length,
+      goodsToBeGiven.length > 1,
+      this.validateCountOfGoodsInHands(goodsToBeGiven),
+      this.validateCountOfGoodsInExchange(goodsToBeGiven, goodsToBeTaken),
+    ]);
+    return isValidExchange;
   }
 
   createInstances() {
     this.deck = new Deck(allCards);
-    this.deckCards = this.deck.shuffle();
+    this.deck.shuffle();
     this.market = new Market([
       "camel",
       "camel",
@@ -128,6 +124,7 @@ class Game {
   }
 
   setUpGame() {
+    this.roundNo += 1;
     this.reset();
     this.createInstances();
     this.tokens = { ...allGoodsTokens };
@@ -149,24 +146,31 @@ class Game {
   }
 
   displayGame() {
-    return [
-      this.tokens,
-      this.marketCards,
-      this.currentPlayer.name,
-      this.currentPlayer.score(),
-      this.currentPlayer.hands(),
-      this.currentPlayer.camels(),
-      this.anotherPlayer.name,
-      this.anotherPlayer.length(),
-      [3, 4, 5].map((index) => this.bonusTokens[index].length),
-      this.camelToken,
-      ["seal", "seal", "seal"],
-      this.deck.length(),
-    ];
+    const coinsPart = {
+      goods: this.tokens,
+      bonus: [3, 4, 5].map((index) => this.bonusTokens[index].length),
+      market: this.marketCards,
+    };
+
+    const currentPlayer = {
+      name: this.currentPlayer.name,
+      score: this.currentPlayer.score(),
+      hands: this.currentPlayer.hands(),
+      camels: this.currentPlayer.camels(),
+    };
+
+    const anotherPlayer = {
+      name: this.anotherPlayer.name,
+      score: this.anotherPlayer.score(),
+      hands: this.anotherPlayer.hands(),
+      camels: this.anotherPlayer.camels(),
+    };
+
+    return { coinsPart, currentPlayer, anotherPlayer };
   }
 
-  enrollPlayers() {
-    this.players = [new Player("player1"), new Player("player2")];
+  enrollPlayers(p1, p2) {
+    this.players = [new Player(p1), new Player(p2)];
   }
 
   isEndOfRound() {
@@ -235,13 +239,16 @@ class Game {
 
   validateTie(player1, player2) {
     const bonusCoinsCount = [player1.countBonus(), player2.countBonus()];
+    console.log(bonusCoinsCount, "bonusCount");
 
     const [_, __, tie] = this.validateResults(bonusCoinsCount, "excellence", 1);
     if (tie) return [_, __, tie];
 
     const tokenCount = [player1.countTokens(), player2.countTokens()];
+    console.log(tokenCount, "tokenCount");
     const result = this.validateResults(tokenCount, "excellence", 1);
     if (result[2]) return result;
+    console.log("Hoping to be tie");
 
     return [player1, player2, "tie"];
   }

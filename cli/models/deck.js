@@ -1,3 +1,4 @@
+import _ from "lodash";
 class Deck {
   cards = [];
 
@@ -5,36 +6,18 @@ class Deck {
     this.cards = cards;
   }
 
-  #getRandom = (min, max) => Math.floor(Math.random() * (max - min + 1) + min);
-
   shuffle = () => {
-    const shuffledArray = [...this.cards];
-    const length = shuffledArray.length;
-    for (let index = length - 1; index > 0; index--) {
-      const randomIndex = this.#getRandom(0, index);
-      const temp = shuffledArray[index];
-
-      shuffledArray[index] = shuffledArray[randomIndex];
-      shuffledArray[randomIndex] = temp;
-    }
-    this.cards = shuffledArray;
-    return shuffledArray;
+    this.cards = _.shuffle(this.cards);
   };
 
   getCards(count) {
-    if (count > this.cards.length) count = this.cards.length;
-    const cards = [];
-
-    while (count > 0) {
-      cards.push(this.cards.shift());
-      count--;
-    }
-
+    const cards = _.chunk(this.cards, count)[0];
+    this.cards = _.drop(this.cards, cards.length);
     return cards;
   }
 
   isEmpty() {
-    return this.cards.length === 0;
+    return _.isEmpty(this.cards);
   }
 
   length() {

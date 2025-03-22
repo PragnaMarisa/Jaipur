@@ -1,11 +1,14 @@
-import { View } from "./view.js";
+// import { View } from "./view.js";
 import { Game } from "./models/game.js";
 
 class Controller {
-  beginGame() {
+  constructor() {
+    this.RoundNo = 1;
+  }
+  beginGame(p1, p2) {
     this.game = new Game();
-    this.view = new View();
-    this.game.enrollPlayers("Pragna", "Sireesha");
+    // this.view = new View();
+    this.game.enrollPlayers(p1, p2);
 
     while (!this.game.isAWinner()) {
       this.game.setUpGame();
@@ -71,10 +74,13 @@ class Controller {
 
   executeRound() {
     while (!this.game.isEndOfRound()) {
-      console.clear();
+      // console.clear();
       const displayData = this.game.displayGame();
-      this.view.displayGame(...displayData);
+      console.log(displayData);
+
+      // this.view.displayGame(...displayData);
       this.processTradeDecision();
+      // this.view.displayGame(...displayData);
       this.game.changePlayer();
     }
 
@@ -83,6 +89,8 @@ class Controller {
   }
 }
 
-const controller = new Controller();
+export { Controller };
 
-controller.beginGame();
+// const controller = new Controller();
+
+// controller.beginGame();

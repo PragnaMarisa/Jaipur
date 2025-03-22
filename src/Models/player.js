@@ -94,8 +94,8 @@ class Player {
         this.camel.removeCards();
         continue;
       }
-      const index = this.hand.cards.indexOf(good);
-      this.hand.cards.splice(index, 1);
+      const index = this.hand.indexOf(good);
+      this.hand.removeCards(index);
     }
   }
 }
