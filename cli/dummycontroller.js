@@ -27,13 +27,6 @@ class Controller {
   }
 
   processExchangeGoods([goodsToBeGiven, goodsToBeTaken]) {
-    console.log(
-      "exchanginnggg",
-      goodsToBeTaken,
-      goodsToBeGiven,
-      this.game.isAValidExchange(goodsToBeGiven, goodsToBeTaken)
-    );
-
     if (this.game.isAValidExchange(goodsToBeGiven, goodsToBeTaken)) {
       this.game.takeSeveralGoods(goodsToBeGiven, goodsToBeTaken);
       return { sucess: "sucess" };
@@ -47,10 +40,7 @@ class Controller {
   }
 
   processGoodsChoice(choice, data) {
-    console.log("Hurray", data);
-
     if (choice < 3 && !data) {
-      console.log("insideeeee", data);
       return choice === 2
         ? { task: "takeSeveralGoods" }
         : { task: "takeSingleGood" };
@@ -68,7 +58,6 @@ class Controller {
   sellGoods(goodNo, count) {
     const good = this.game.goods[goodNo];
     if (this.game.validateSellingGoods(good, count)) {
-      console.log("selling", good, count, "times");
       this.game.sellGoods(good, count);
       return { sucess: "sucess" };
     }
@@ -80,10 +69,9 @@ class Controller {
     if (!(choice === 1 || choice === 2)) return { error: "Invalid Option" };
 
     if (choice === 1) {
-      console.log("taking goods");
       if ([1, 2, 3].includes(subchoice))
         return this.processGoodsChoice(subchoice, data);
-      return { task: "takeGoods" };
+      return subchoice ? { error: "invalid choice" } : { task: "takeGoods" };
     } else {
       if (subchoice) return this.sellGoods(...subchoice);
       return { task: "sellGoods" };
@@ -99,10 +87,10 @@ class Controller {
     this.game.changePlayer();
   }
 
-  executeRound() {
+  roundSummary() {
     if (this.game.isEndOfRound()) {
       const [winner, runner] = this.game.updatePlayersScore();
-      this.view.roundSummary(winner, runner);
+      return { winner, runner };
     }
   }
 }

@@ -17,7 +17,7 @@ class View {
   tradeChoice() {
     const choice = parseInt(prompt(this.prompts.tradeChoice[0]).trim());
 
-    return choice;
+    return choice || true;
   }
 
   displayMessage({ message }) {
@@ -28,6 +28,7 @@ class View {
     if ("message" in input) return this.displayMessage(input);
     if ("task" in input) return this[input.task]();
     if ("error" in input) return this.displayError(input);
+    if ("winner" in input) return this.roundSummary(input.winner, input.runner);
     if ("currentPlayer" in input) {
       this.displayGame(input.coinsPart, input.currentPlayer);
       return this.tradeChoice();
@@ -57,7 +58,7 @@ class View {
 
   getTypeOfGood = () => {
     const codeOfGood = parseInt(prompt(this.prompts.sell[0]).trim());
-    return codeOfGood;
+    return codeOfGood || true;
   };
 
   getNoOfGoodsSold = () => parseInt(prompt(this.prompts.sell[1]).trim());
@@ -66,12 +67,12 @@ class View {
     const typeOfGood = this.getTypeOfGood();
     const count = this.getNoOfGoodsSold();
 
-    return [typeOfGood, count];
+    return [typeOfGood, count || true];
   }
 
   takeGoods() {
     const choice = parseInt(prompt(this.prompts.takeCards[0]).trim());
-    return choice;
+    return choice || true;
   }
 
   takeSingleGood() {

@@ -1,6 +1,7 @@
 class DiamondTokens {
   retrieveTokens() {
-    return [7, 7, 5, 5, 5];
+    // return [7, 7, 5, 5, 5];
+    return [7, 7];
   }
 }
 class SilverTokens {

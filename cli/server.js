@@ -17,7 +17,7 @@ class Server {
 
       if (this.connections.length === 2) {
         this.names = this.connections.map((obj) => Object.keys(obj)[0]);
-        this.sendMsgToAll("Begining the game..");
+        this.sendMsgToAll({ message: "Begining the game.." });
         this.controller.beginGame(...this.names);
         this.controller.startGame();
         this.executeRound();
@@ -57,8 +57,10 @@ class Server {
     while (true) {
       console.log(choice);
       const tradeResult = this.controller.processTradeDecision(...choice);
+      console.log(tradeResult);
 
-      if (!tradeResult?.task) return tradeResult;
+      if ("error" in tradeResult || !("task" in tradeResult))
+        return tradeResult;
 
       this.writeMsg(tradeResult, this.curCon);
       const subchoice = await this.getPlayerInput(this.curCon);
@@ -68,16 +70,20 @@ class Server {
 
   async executeRound() {
     this.sendGameState();
-    if (!this.controller.game.isEndOfRound()) {
-      let choice = await this.getPlayerInput(this.curCon);
-      choice = choice.input;
-      const x = await this.processTrade(choice);
-      console.log(x);
-      if ("sucess" in x) {
-        this.controller.changePlayer();
-      }
-      this.executeRound();
+    let choice = await this.getPlayerInput(this.curCon);
+    choice = choice.input;
+    const x = await this.processTrade(choice);
+    console.log(x);
+    if ("sucess" in x) {
+      this.controller.changePlayer();
     }
+    if (this.controller.game.isEndOfRound()) {
+      console.log("sent");
+      this.sendMsgToAll(this.controller.roundSummary());
+      await new Promise((resolve) => setTimeout(resolve, 5000));
+      this.controller.startGame();
+    }
+    await this.executeRound();
   }
 
   async getPlayerInput(conn) {
@@ -89,7 +95,7 @@ class Server {
     const connections = this.connections.map((obj) => Object.values(obj)[0]);
     connections.map(async (conn) => {
       const encoder = new TextEncoder();
-      await conn.write(encoder.encode(JSON.stringify({ message: msg })));
+      await conn.write(encoder.encode(JSON.stringify(msg)));
     });
   }
 
@@ -101,17 +107,6 @@ class Server {
     console.log(msg, "--->");
 
     return msg;
-  }
-
-  async handleConnection(connection, name) {
-    try {
-      while (true) {
-        const msg = await this.readMsg(connection);
-        this.sendMsgToAll(connection, name, msg);
-      }
-    } catch {
-      console.log("closed");
-    }
   }
 }
 
