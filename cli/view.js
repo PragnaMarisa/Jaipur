@@ -2,58 +2,89 @@ import chalk from "chalk";
 
 class View {
   prompts = {
-    tradeChoice: ["sell or take cards? \n 1.take cards\n 2.sell cards.\n"],
+    tradeChoice: [
+      `${chalk.gray("-".repeat(127))}\n${chalk.blue(
+        "trade center"
+      )}${chalk.magenta("\n1️⃣ Take Goods\n2️⃣ Sell Goods\nenter your choice:")}`,
+    ],
     sell: [
-      "1.Diamond\n2.Gold\n3.Silver\n4.Clothes\n5.Spices\n6.Leather",
-      "Enter no of goods you want to sell\n",
+      `${chalk.gray("-".repeat(127))}\n${chalk.red(
+        "1.Diamond\n2.Gold\n3.Silver\n4.Clothes\n5.Spices\n6.Leather"
+      )}\n${chalk.blue("enter your choice:")}`,
+      `${chalk.green("Enter no of goods you want to sell:")}`,
+      `\n${chalk.gray("-".repeat(127))}`,
     ],
+
     takeCards: [
-      "1. Take single good\n2. Take several goods\n3. Take all the camels.\n",
+      `${chalk.gray("-".repeat(127))}\n${chalk.green(
+        "1️⃣ Take single good\n2️⃣ Take several goods\n3️⃣ Take All Camels\nenter your choice:"
+      )}`,
     ],
-    singleGood: ["Which good you want to take: "],
+    singleGood: [`${chalk.green("Which good you want to take: ")}`],
     severalGoods: [
-      "Enter goods you want to take: ",
-      "Enter goods you wanted to exchange: ",
+      `${chalk.magenta("Enter goods you want to take: ")}`,
+      `${chalk.magenta("Enter goods you wanted to exchange: ")}`,
     ],
   };
+
   tradeChoice() {
     const choice = parseInt(prompt(this.prompts.tradeChoice[0]).trim());
 
     return choice;
   }
 
-  displayAllGoods(tokens, marketCards, hands, camels) {
+  displayGoodTokens(tokens, bonusCount) {
+    console.log(
+      chalk.red.bold("GOODS TOKENS").padEnd(75) + chalk.red.bold("Bonus Tokens")
+    );
+    console.log(chalk.gray("-".repeat(127)));
+
+    let bonusTokens = 3;
     const tokenEntries = Object.entries(tokens);
-    const marketText = marketCards.join("  ");
-    const playerText = hands.join("  ");
-    const camelsText = camels.length > 0 ? camels.join("  ") : "";
 
     tokenEntries.forEach(([type, count], index) => {
-      const tokenLine = `${chalk.green(type)}: ${count}`.padEnd(30);
-      const marketLine = index === 0 ? marketText.padEnd(40) : "";
-      const playerLine = index === 0 ? playerText : "";
-      console.log(`${tokenLine}${chalk.green(marketLine)}${playerLine}`);
-      if (index === 0 && camelsText)
-        console.log(" ".repeat(30 + 40) + camelsText);
+      const countTokens = count.join(" ");
+      const tokenLine = `${chalk.green(type)}: ${countTokens}`.padEnd(70);
+      const bonusCoins =
+        index < 3 ? `${chalk.green(bonusTokens++)}:${bonusCount[index]}` : "";
+      console.log(tokenLine, bonusCoins);
     });
   }
 
-  displayGame(tokens, marketCards, name, score, hands, camels) {
+  displayPlayerCards(hands, camels) {
+    console.log(chalk.red.bold("PLAYER CARDS").padStart(80) + "\n");
+    console.log(hands.join(" ").padEnd(80), camels.join(" "));
+  }
+
+  displayMarket(marketCards) {
+    const marketText = marketCards.join("  ");
+    console.log(chalk.red.bold("MARKET").padStart(80) + "\n");
+    console.log(marketText.padStart(75));
+  }
+
+  displayGame(
+    tokens,
+    marketCards,
+    name,
+    score,
+    hands,
+    camels,
+    _,
+    __,
+    bonusCount
+  ) {
+    const line = chalk.gray("-".repeat(127));
     console.log(
       `${chalk.yellow.bold("PLAYER:")} ${name} ${chalk.yellow.bold(
         `(Score: ${score})`
       )}`
     );
-    console.log(chalk.gray("-".repeat(100)));
-    console.log(
-      chalk.red.bold("TOKENS").padEnd(60) +
-        chalk.red.bold("MARKET").padEnd(60) +
-        chalk.red.bold("PLAYER'S CARDS")
-    );
-    console.log(chalk.gray("-".repeat(100)));
-
-    this.displayAllGoods(tokens, marketCards, hands, camels);
-    console.log(chalk.gray("-".repeat(100)));
+    console.log(line);
+    this.displayGoodTokens(tokens, bonusCount);
+    console.log(line);
+    this.displayMarket(marketCards);
+    console.log(line);
+    this.displayPlayerCards(hands, camels);
   }
 
   getTypeOfGood = () => {
